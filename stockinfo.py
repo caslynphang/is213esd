@@ -8,9 +8,8 @@ yesterday = str(date.today() - timedelta(days=1))
 
 app = Flask(__name__)
 
-@app.route("/stockinfo/ticker/buy/<string:closeprice>")
+@app.route("/stock_info/buy/<string:stockName>")
 def buy(user_chosen_ticker):
-
 
 # recommend by close price
 
@@ -23,15 +22,20 @@ def buy(user_chosen_ticker):
     for result in results:
         if result['T'] == user_chosen_ticker:
             user_ticker_close_price = result['c']
+            final_result = {"Ticker" : str(result['T']), "Close Price" : str(user_ticker_close_price)}
+            final_result1 = json.dumps(final_result)
+            return final_result1
 
-            print('Ticker: '+ str(result['T'])+'; Close price: '+ str(user_ticker_close_price))
+# # find a suitable stock price range 
+#     upper_limit = user_ticker_close_price * 1.1
+#     lower_limit = user_ticker_close_price *0.9
+# # using the stock price range based on users' ticker, we can find other tickers within the range
+#     for result in results:
+#         if result['c'] <upper_limit and result['c'] > lower_limit and result['T'] != user_chosen_ticker:
+#             ticker_close_price = result['c']
+#             final_result = {"Ticker" : str(result['T']), "Close Price" : str(ticker_close_price)}
+#             print(final_result)
 
-# find a suitable stock price range 
-    upper_limit = user_ticker_close_price * 1.1
-    lower_limit = user_ticker_close_price *0.9
-# using the stock price range based on users' ticker, we can find other tickers within the range
-    for result in results:
-        if result['c'] <upper_limit and result['c'] > lower_limit and result['T'] != user_chosen_ticker:
-            ticker_close_price = result['c']
-            final_result = {"Ticker" : str(result['T']), "Close Price" : str(ticker_close_price)}
-            print(final_result)
+
+if __name__ == '__main__':
+    app.run(port=5000, debug=True)
