@@ -3,11 +3,14 @@ from flask import Flask, jsonify
 from datetime import date, timedelta
 import requests
 import json
+from flask_cors import CORS
+
 # yesterday / today->(api may not update that quickly :|)
 yesterday = str(date.today() - timedelta(days=1))
 # today = str(date.today())
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/stock_info/buy/<string:stockName>")
 def buy(stockName):   
@@ -23,5 +26,5 @@ def buy(stockName):
             final_result1 = json.dumps(final_result)
             return final_result1
         
- if __name__ == '__main__':
+if __name__ == '__main__':
     app.run(port=5000, debug=True)
