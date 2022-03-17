@@ -1,9 +1,4 @@
-from flask import Flask, jsonify
-from datetime import date, timedelta
-import requests
-import json
-# yesterday / today->(api may not update that quickly :|)
-yesterday = str(date.today() - timedelta(days=1))
+
 from flask import Flask, jsonify
 from datetime import date, timedelta
 import requests
