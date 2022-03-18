@@ -27,6 +27,34 @@
                 <input type="search" name="" placeholder="Enter Stock Name" id="stockName">
                 <br>
                 <button type="submit" class="btn btn-primary mt-4" id = "submit">Submit</button>
+
+                
+                <!-- currently hidden, will be shown when user clicks submit -->
+                <div class="row" id = "buy_info">
+                    <div class="col-12">
+                        <hr>
+                        <p>Stock Ticker: <span id = "ticker"></span></p>
+                        <p>Last Price: <span id = "price"></span></p>
+                        <p>Quantity: <input type="number" placeholder = "Enter Stock Quantity" name="" id="quantity"></p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary mt-4" id = "buy">Buy</button>
+                        </div>
+
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary mt-4" id = "sell">Sell</button>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <script>$("#buy_info").hide()</script>
+                <!-- currently hidden, will be shown when user clicks submit -->
+
             </div>
         </div>
         
