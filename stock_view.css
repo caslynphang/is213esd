@@ -9,9 +9,17 @@ body {
   --light_gray: #f7f7f7;
 }
 
+.outer {
+    min-height: 100vh;
+    
+}
+
 .sidebar {
   background-color: var(--light_gray);
   border-radius: 4rem;
+  box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.25);
 }
 
 .sidebar-header {
@@ -43,8 +51,8 @@ input[type="text"]:focus {
 }
 
 .selected-credit-card {
-    background-color: #F6E9F0;
-    border-radius: 0.8rem;
+  background-color: #f6e9f0;
+  border-radius: 0.8rem;
 }
 
 .practice-card {
@@ -56,11 +64,11 @@ input[type="text"]:focus {
 }
 
 .practice-card-1 {
-    background-color: #f4a8ad;
+  background-color: #f4a8ad;
 }
 
 .practice-card-2 {
-    background-color: #4C56E9;
+  background-color: #4c56e9;
 }
 
 .practice-card-tail {
@@ -70,10 +78,18 @@ input[type="text"]:focus {
 }
 
 a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 a:hover {
-    color: black;
+  color: black;
+}
+
+.services {
+  font-size: 0.8rem;
+}
+
+.selected-service {
+    background-color: #F6E9F0;
 }
