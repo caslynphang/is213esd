@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  background-color: #f1f0f5;
+  font-family: "Roboto", sans-serif;
+}
+
+:root {
+  --light_gray: #f7f7f7;
+}
+
+.sidebar {
+  background-color: var(--light_gray);
+  border-radius: 4rem;
+}
+
+.sidebar-header {
+  height: 43px;
+}
+
+hr {
+  background-color: #d6d6d6;
+  height: 2px !important;
+}
+
+.searchbar {
+  background-color: #edeef5;
+}
+
+input[type="text"] {
+  border: none;
+  background-color: #edeef5;
+  width: 100%;
+}
+
+::placeholder {
+  color: #9a9ba4;
+  font-size: 0.9rem;
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+.selected-credit-card {
+    background-color: #F6E9F0;
+    border-radius: 0.8rem;
+}
+
+.practice-card {
+  padding: 0.7em 0 0.7em 1.3em;
+  font-size: 0.7em;
+  color: white;
+  max-width: 11ch;
+  border-radius: 0.6rem 0 0 0.6em;
+}
+
+.practice-card-1 {
+    background-color: #f4a8ad;
+}
+
+.practice-card-2 {
+    background-color: #4C56E9;
+}
+
+.practice-card-tail {
+  background-color: #553b4b;
+  width: 0.8em;
+  border-radius: 0 0.6em 0.6em 0;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    color: black;
+}
