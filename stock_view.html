@@ -34,94 +34,118 @@
       <div class="row">
         <!-- sidebar -->
         <div class="col-4 outer p-4">
-            <div class="sidebar h-100 py-4 px-5 ">
+          <div class="sidebar h-100 py-4 px-5">
+            <!-- header -->
+            <div class="sidebar-header d-flex justify-content-between w-100">
+              <img src="images/logo.png" alt="" />
+              <img src="images/profile_picture.png" alt="" />
+            </div>
 
-          <!-- header -->
-          <div class="sidebar-header d-flex justify-content-between w-100">
-            <img src="images/logo.png" alt="" />
-            <img src="images/profile_picture.png" alt="" />
-          </div>
+            <hr />
 
-          <hr />
+            <!-- searchbar -->
+            <div
+              class="searchbar d-flex align-items-center py-3 px-4 rounded-pill mt-4"
+            >
+              <img src="./images/search.png" class="h-100 pe-2" alt="" />
+              <input type="text" placeholder="Search stock" />
+            </div>
 
-          <!-- searchbar -->
-          <div
-            class="searchbar d-flex align-items-center py-3 px-4 rounded-pill mt-4"
-          >
-            <img src="./images/search.png" class="h-100 pe-2" alt="" />
-            <input type="text" placeholder="Search stock" />
-          </div>
-
-          <!-- credit cards -->
-          <div class="my-5">
-            <a href="#">
-              <div
-                class="d-flex justify-content-between align-items-center selected-credit-card p-3 my-4"
-              >
-                <div class="d-flex">
-                  <div class="d-flex pe-4">
-                    <div class="practice-card practice-card-1">
-                      Practice card 1
+            <!-- credit cards -->
+            <div class="my-5">
+              <a href="#">
+                <div
+                  class="d-flex justify-content-between align-items-center selected-credit-card p-3 my-4"
+                >
+                  <div class="d-flex">
+                    <div class="d-flex pe-4">
+                      <div class="practice-card practice-card-1">
+                        Practice card 1
+                      </div>
+                      <div class="practice-card-tail"></div>
                     </div>
-                    <div class="practice-card-tail"></div>
+
+                    <p class="fw-bold fs-3 m-0">
+                      <span class="fs-6 align-middle">$ </span>2 200
+                    </p>
                   </div>
 
-                  <p class="fw-bold fs-3 m-0">
-                    <span class="fs-6 align-middle">$ </span>2 200
-                  </p>
+                  <img src="images/side_arrow.png" class="h-100" alt="" />
                 </div>
+              </a>
 
-                <img src="images/side_arrow.png" class="h-100" alt="" />
-              </div>
-            </a>
-
-            <a href="#">
-              <div
-                class="d-flex justify-content-between align-items-center p-3 my-4"
-              >
-                <div class="d-flex">
-                  <div class="d-flex pe-4">
-                    <div class="practice-card practice-card-2">
-                      Practice card 2
+              <a href="#">
+                <div
+                  class="d-flex justify-content-between align-items-center p-3 my-4"
+                >
+                  <div class="d-flex">
+                    <div class="d-flex pe-4">
+                      <div class="practice-card practice-card-2">
+                        Practice card 2
+                      </div>
+                      <div class="practice-card-tail"></div>
                     </div>
-                    <div class="practice-card-tail"></div>
+
+                    <p class="fw-bold fs-3 m-0">
+                      <span class="fs-6 align-middle">$ </span>12 029
+                    </p>
                   </div>
 
-                  <p class="fw-bold fs-3 m-0">
-                    <span class="fs-6 align-middle">$ </span>12 029
-                  </p>
+                  <img src="images/side_arrow.png" class="h-100" alt="" />
                 </div>
+              </a>
+            </div>
 
-                <img src="images/side_arrow.png" class="h-100" alt="" />
-              </div>
-            </a>
-          </div>
+            <!-- services -->
+            <h5 class="fw-bold">Services</h5>
 
-          <!-- services -->
-          <h5 class="fw-bold">Services</h5>
-          
-          <div class="row">
-              <a href="#" class="col services rounded text-center mx-2 py-3 selected-service">
-                <img src="images/stock_market.png" alt="" class="mb-2"/>
+            <div class="row">
+              <a
+                href="#"
+                class="col services rounded text-center mx-2 py-3 selected-service"
+              >
+                <img src="images/stock_market.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Market</p>
               </a>
 
-              <a href="#" class="col services bg-white rounded text-center mx-2 py-3">
-                <img src="images/portfolio.png" alt="" class="mb-2"/>
+              <a
+                href="#"
+                class="col services bg-white rounded text-center mx-2 py-3"
+              >
+                <img src="images/portfolio.png" alt="" class="mb-2" />
                 <p class="m-0">Portfolio</p>
               </a>
-              
-              <a href="#" class="col services bg-white rounded text-center mx-2 py-3">
-                <img src="images/thumbs_up.png" alt="" class="mb-2"/>
+
+              <a
+                href="#"
+                class="col services bg-white rounded text-center mx-2 py-3"
+              >
+                <img src="images/thumbs_up.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
             </div>
           </div>
         </div>
-    </div>
 
         <!-- stock market -->
-        <div class="col"></div>
+        <div class="col">
+          <div class="container outer p-5">
+            <h1 class="fw-bold">Stock market</h1>
+
+            <table class="table mt-5">
+              <tr>
+                <th>Markets</th>
+                <th>Sell</th>
+                <th>Buy</th>
+                <th>Volume</th>
+              </tr>
+
+              <tr>
+                <!-- populate stock data -->
+              </tr>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </body>
