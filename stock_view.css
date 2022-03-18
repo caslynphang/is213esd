@@ -5,13 +5,16 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+p {
+  margin: 0;
+}
+
 :root {
   --light_gray: #f7f7f7;
 }
 
 .outer {
-    min-height: 100vh;
-    
+  min-height: 100vh;
 }
 
 .sidebar {
@@ -88,8 +91,72 @@ a:hover {
 
 .services {
   font-size: 0.8rem;
+  background-color: white;
+  transition: background 100ms;
+}
+
+.services:hover {
+  background-color: #f6e9f0;
 }
 
 .selected-service {
-    background-color: #F6E9F0;
+  background-color: #f6e9f0;
+}
+
+.stock-picture {
+  background-color: #4c56e9;
+  color: white;
+  min-width: 5vh;
+  border-radius: 0.6rem;
+  z-index: 10;
+}
+
+.sell::before {
+  content: "S";
+  background-color: #54626e;
+  color: white;
+  border-radius: 0.5rem 0 0 0.5rem;
+  padding: 0.7rem 1rem;
+  position: relative;
+  top: -0.7rem;
+  float: left;
+}
+
+.sell {
+  padding: 0.7rem 0.7rem 0.7rem 0;
+  background-color: #e7e5ed;
+  border-radius: 0.5rem;
+  text-align: end;
+  height: 100%;
+}
+
+.buy::before {
+  content: "B";
+  background-color: #54626e;
+  color: white;
+  border-radius: 0.5rem 0 0 0.5rem;
+  padding: 0.7rem 1rem;
+  position: relative;
+  top: -0.7rem;
+  float: left;
+}
+
+.buy {
+  padding: 0.7rem 0.7rem 0.7rem 0;
+  background-color: #e7e5ed;
+  border-radius: 0.5rem;
+  text-align: end;
+}
+
+tr {
+  border-radius: 3rem;
+  transition: background 100ms;
+}
+
+tr:hover {
+  background-color: white;
+}
+
+.vol-align {
+  line-height: 290%;
 }
