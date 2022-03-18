@@ -11,6 +11,7 @@ p {
 
 :root {
   --light_gray: #f7f7f7;
+  --light_pink: #f6e9f0;
 }
 
 .outer {
@@ -54,8 +55,17 @@ input[type="text"]:focus {
 }
 
 .selected-credit-card {
-  background-color: #f6e9f0;
+  background-color: var(--light_pink);
+}
+
+.credit-card {
+  transition: background 100ms;
   border-radius: 0.8rem;
+
+}
+
+.credit-card:hover {
+  background-color: var(--light_pink);
 }
 
 .practice-card {
@@ -96,11 +106,11 @@ a:hover {
 }
 
 .services:hover {
-  background-color: #f6e9f0;
+  background-color: var(--light_pink);
 }
 
 .selected-service {
-  background-color: #f6e9f0;
+  background-color: var(--light_pink);
 }
 
 .stock-picture {
