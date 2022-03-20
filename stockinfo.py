@@ -14,7 +14,7 @@ CORS(app)
 @app.route("/stock_info/buy/<string:stockName>")
 def buy(stockName):   
 # get yesterday's/today's close prices for all stocks (USE YOUR OWN KEYS LOL[i only hv 5 req/min] -- polygon.io)
-    r = requests.get('https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/'+ yesterday +'?adjusted=true&apiKey=JVUOJpz7eTK1LXR6J0bZxnQVnyifIbvt')
+    r = requests.get('https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2022-03-18?adjusted=true&apiKey=JVUOJpz7eTK1LXR6J0bZxnQVnyifIbvt')
     results = r.json()['results']
 
 # find close price of stock chosen by user
