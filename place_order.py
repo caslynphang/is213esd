@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from invokes import invoke_http
 import requests
 import json
 from flask_cors import CORS
@@ -17,14 +18,24 @@ def buy(ticker_amount_quantity):
     quantity = int(ticker_amount_quantity.split("&")[2])
     
 
+    #2.1 Preparing buy_information in JSON format to be sent to portfolio microservice
     buy_information = {"ticker": ticker, "amount": amount, "quantity:" : quantity, "order_type" : "buy"}
 
     buy_information_json = json.dumps(buy_information)
 
+    #2.2 Temporary return statement for testing purposes
     return buy_information
 
     #3. invoke portfolio microservice using invoke_http function imported from invokes.py -- see line 2
-    #3.1 pass in buy_information_json as json argument
+    
+    #3.1 insert url to call portfolio microservice
+    url = "#"
+    
+    #3.2 invoking the portfolio microservice with buy information passed in as json argument
+    result = invoke_http(url, method='POST', json=buy_information_json, **kwargs)
+
+    return result
+
 
 
 if __name__ == '__main__':
