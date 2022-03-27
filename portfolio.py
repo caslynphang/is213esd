@@ -179,7 +179,24 @@ def buy_sell_positions(portfolio_id):
                         }
                     ), 200
 
-
+@app.route("/<string:portfolio_id>/positions") #get all positions by portfolio_id
+def get_positions(portfolio_id):
+    positions = Positions.query.filter_by(portfolio_id = portfolio_id)#SQLAlchemy magic
+    if positions:
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "positions": [position.json() for position in positions] #returns list of portfolios in json format
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no portfolios."
+        }
+    ), 404 #if status code is not specified, 200 OK is returned by default -- hence error 404 code is needed.
 
 
 
