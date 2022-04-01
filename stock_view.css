@@ -61,7 +61,6 @@ input[type="text"]:focus {
 .credit-card {
   transition: background 100ms;
   border-radius: 0.8rem;
-
 }
 
 .credit-card:hover {
@@ -169,4 +168,39 @@ tr:hover {
 
 .vol-align {
   line-height: 290%;
+}
+
+.portfolio-banner {
+  background-image: url("images/portfolio_banner.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 2.5rem 2.5rem 0 2.5rem;
+  border-radius: 1rem;
+}
+
+.floating-pill {
+  position: relative;
+  top: 1.5rem;
+  width: 90%;
+  background-color: white;
+  border-radius: 3rem;
+  padding: 1rem 3rem;
+}
+
+.subtext {
+  font-size: 0.7rem;
+}
+
+.subtext-profit {
+  color: #5db16e;
+}
+
+.subtext-loss {
+  color: #b15d5d;
+}
+
+.soft-shadow {
+  box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.452);
+  -webkit-box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.452);
+  -moz-box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.452);
 }
