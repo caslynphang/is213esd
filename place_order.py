@@ -1,11 +1,39 @@
 from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from invokes import invoke_http
 import requests
 import json
+import datetime
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/esdproject' #dynamically retrieves db url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications require extra memory and is not necessary in this case
+
+db = SQLAlchemy(app) #initialization of connection, stored in variable db
+
+class Orders(db.model):
+    __tablename__ = "orders"
+
+    portfolio_id = db.Column(db.Integer, primary_key = True)
+    order_type = db.column(db.String(4), nullable = False)
+    ticker = db.Column(db.String(45), nullable = False)
+    price = db.column(db.Float(), nullable = False)
+    quantity = db.Column(db.Integer, nullable = False)
+    time_placed = db.Column(db.DateTime(), nullable = False)
+
+    def __init__(self, portfolio_id, order_type, ticker, price, quantity, time_placed): #constructor. initializes record
+        self.portfolio_id = portfolio_id
+        self.order_type = order_type
+        self.ticker = ticker
+        self.price = price
+        self.quantity = quantity
+        self.time_placed = time_placed
+
+    def json(self): #returns json representation of the table in dict form
+        return {"portfolio_id": self.portfolio_id, "order_type": self.order_type, "ticker":self.ticker, "price": self.price, "quantity": self.quantity, "time_placed": self.time_placed} 
 
 
 
@@ -18,6 +46,7 @@ def buy(ticker_amount_quantity):
     ticker = ticker_amount_quantity.split("&")[0]
     price = float(ticker_amount_quantity.split("&")[1])
     quantity = int(ticker_amount_quantity.split("&")[2])
+    portfolio_id = None #get portfolio ID from XE
     
 
     #2.1 Preparing buy_information in JSON format to be sent to portfolio microservice
@@ -37,9 +66,31 @@ def buy(ticker_amount_quantity):
     #3.2 invoking the portfolio microservice with buy information passed in as json argument
     result = invoke_http(url, method='POST', json=buy_information_json, **kwargs)
 
-    return result
+    #3.3adding record to orders table
+    if(result == 200 or result == 201):
 
+        time_placed = datetime.datetime.now()
+        
+        order = Orders(portfolio_id, "buy", ticker, price, quantity, time_placed)
 
+        try:
+            db.session.add(order)
+            db.session.commit()
+        except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred recording the order."
+                }
+            ), 500
+
+    else:
+        return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred recording the order."
+                }
+        ), 500
 
 # 4. route "sell" function for frontend Axios call with ticker symbol and amount passed through parameter "ticker_amount_quantity"
 # 4.1 format for ticker_amount_quantity parameter to be passed from frontend - "ticker&price&quantity" - Example - "TSLA&800&8"

@@ -24,6 +24,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE IF NOT EXISTS `orders` (
+  `portfolio_id` int(11) NOT NULL,
+  `order_type` varchar(4) NOT NULL,
+  `ticker` varchar(45) NOT NULL,
+  `price` float NOT NULL,
+  `quantity` int NOT NULL,
+  `time_placed` datetime NOT NULL,
+  PRIMARY KEY (`portfolio_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `portfolio`
 --
 
