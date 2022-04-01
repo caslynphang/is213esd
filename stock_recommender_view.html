@@ -108,12 +108,18 @@
                 <p class="m-0">Stock <br />Market</p>
               </a>
 
-              <a href="#" class="col services rounded text-center mx-2 py-3 selected-service">
+              <a
+                href="portfolio_view.html"
+                class="col services rounded text-center mx-2 py-3"
+              >
                 <img src="images/portfolio.png" alt="" class="mb-2" />
                 <p class="m-0">Portfolio</p>
               </a>
 
-              <a href="stock_recommender_view.html" class="col services rounded text-center mx-2 py-3">
+              <a
+                href="#"
+                class="col services rounded text-center mx-2 py-3 selected-service"
+              >
                 <img src="images/thumbs_up.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
@@ -121,31 +127,45 @@
           </div>
         </div>
 
-        <!-- portfolio -->
+        <!-- stock market -->
         <div class="col">
           <div class="container outer p-5">
-            <h1 class="fw-bold text-muted fs-3">You Have <span class="text-dark">7</span> Portfolio</h1>
+            <div class="text-white bg-dark">
+              <h1 class="fw-bold">Similar Stocks</h1>
 
-            <div class="fw-bold text-white portfolio-banner soft-shadow mt-4">
-                <p>My Portfolio</p>
-                <h1 class="fw-bold">$1,000,000</h1>
-                <div class="d-flex justify-content-center">
+              <p>Select stock</p>
 
-                <div class="d-flex justify-content-between floating-pill soft-shadow text-dark">
-                    <p>Profit</p>
-                    <div class="d-flex align-items-center">
-                        <p class="subtext-profit pe-3">$11,289.22</p>
-                        <img src="images/increase.png" height="11px" alt="">
-                        <p class="ps-2">3.2%</p>
+              <div>
+                <div class="d-flex">
+                    <p
+                      class="stock-picture mb-0 d-flex justify-content-center align-items-center"
+                    >
+                      A
+                    </p>
+                    <div class="ps-4">
+                      <p>ADA</p>
+                      <p class="text-muted">Cardano</p>
                     </div>
-                </div>
+                  </div>
+              </div>
+
+              <div class="ps-4">
+                <p>ADA</p>
+                <p class="text-muted">Cardano</p>
+              </div>
+
+              <div class="sell fw-bold">0.7945</div>
+              <div class="buy fw-bold">0.8113</div>
             </div>
 
-            </div>
-            
-            <p class="fw-bold mt-5">My Stocks</p>
+            <table class="table table-borderless mt-5">
+              <tr>
+                <th>Markets</th>
+                <th>Sell</th>
+                <th>Buy</th>
+                <th>Volume</th>
+              </tr>
 
-            <table class="table table-borderless">
               <!-- populate stock data -->
               <tr>
                 <td>
@@ -161,9 +181,9 @@
                     </div>
                   </div>
                 </td>
-                <td class="text-end fw-bold">26,122,646 <br>
-                <span class="subtext subtext-profit">+66.11 (3%)</span>
-                </td>
+                <td><div class="sell fw-bold">0.7945</div></td>
+                <td><div class="buy fw-bold">0.8113</div></td>
+                <td class="vol-align">26,122,646</td>
               </tr>
             </table>
           </div>
