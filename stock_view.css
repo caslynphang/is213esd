@@ -39,7 +39,7 @@ hr {
   background-color: #edeef5;
 }
 
-input[type="text"] {
+.search-input {
   border: none;
   background-color: #edeef5;
   width: 100%;
@@ -203,4 +203,48 @@ tr:hover {
   box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.452);
   -webkit-box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.452);
   -moz-box-shadow: 0px 3px 35px -17px rgba(0, 0, 0, 0.452);
+}
+
+.dropdown-btn {
+  background-color: #F1F0F5;
+  width: 10%;
+  border-radius: 0 1rem 1rem 0;
+}
+
+.selected {
+  width: 90%;
+  border-radius: 1rem 0 0 1rem;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 100;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.filter-bar {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: solid 1px black;
+  margin-right: 1rem;
+  background-color: #EDEEF5;
+}
+
+.filter-bar::placeholder {
+  text-align: center;
+}
+
+.black-bg {
+  background-color: black;
+  position: fixed;
+  height: 338px;
+  z-index: -1;
 }
