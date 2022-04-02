@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TradingWheels - Stock Market</title>
+
+    <!-- Axios API -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+    <!-- Bootstrap JS CDN -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- file CSS -->
+    <link rel="stylesheet" href="stock_view.css" />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- sidebar -->
+        <div class="col-4 outer p-4">
+          <div class="sidebar h-100 py-4 px-5">
+            <!-- header -->
+            <div class="sidebar-header d-flex justify-content-between w-100">
+              <img src="images/logo.png" alt="" />
+              <img src="images/profile_picture.png" alt="" />
+            </div>
+
+            <hr />
+
+            <!-- searchbar -->
+            <div
+              class="searchbar d-flex align-items-center py-3 px-4 rounded-pill mt-4"
+            >
+              <img src="./images/search.png" class="h-100 pe-2" alt="" />
+              <input
+                type="text"
+                placeholder="Search stock"
+                class="search-input"
+              />
+            </div>
+
+            <!-- credit cards -->
+            <div class="my-5">
+              <a href="#">
+                <div
+                  class="d-flex justify-content-between align-items-center credit-card selected-credit-card p-3 my-4"
+                >
+                  <div class="d-flex">
+                    <div class="d-flex pe-4">
+                      <div class="practice-card practice-card-1">
+                        Practice card 1
+                      </div>
+                      <div class="practice-card-tail"></div>
+                    </div>
+
+                    <p class="fw-bold fs-3 m-0">
+                      <span class="fs-6 align-middle">$ </span>2 200
+                    </p>
+                  </div>
+
+                  <img src="images/side_arrow.png" class="h-100" alt="" />
+                </div>
+              </a>
+
+              <a href="#">
+                <div
+                  class="d-flex justify-content-between credit-card align-items-center p-3 my-4"
+                >
+                  <div class="d-flex">
+                    <div class="d-flex pe-4">
+                      <div class="practice-card practice-card-2">
+                        Practice card 2
+                      </div>
+                      <div class="practice-card-tail"></div>
+                    </div>
+
+                    <p class="fw-bold fs-3 m-0">
+                      <span class="fs-6 align-middle">$ </span>12 029
+                    </p>
+                  </div>
+
+                  <img src="images/side_arrow.png" class="h-100" alt="" />
+                </div>
+              </a>
+            </div>
+
+            <!-- services -->
+            <h5 class="fw-bold">Services</h5>
+
+            <div class="row">
+              <a
+                href="stock_view.html"
+                class="col services rounded text-center mx-2 py-3"
+              >
+                <img src="images/stock_market.png" alt="" class="mb-2" />
+                <p class="m-0">Stock <br />Market</p>
+              </a>
+
+              <a
+                href="portfolio_view.html"
+                class="col services rounded text-center mx-2 py-3"
+              >
+                <img src="images/portfolio.png" alt="" class="mb-2" />
+                <p class="m-0">Portfolio</p>
+              </a>
+
+              <a href="#" class="col services rounded text-center mx-2 py-3">
+                <img src="images/thumbs_up.png" alt="" class="mb-2" />
+                <p class="m-0">Stock <br />Recommender</p>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="black-bg"></div>
+
+        <!-- stock market -->
+        <div class="col">
+          <div class="container outer p-5">
+            <div class="text-white fw-bold bg-black">
+              <div class="d-flex">
+                <p
+                  class="stock-picture mb-0 d-flex justify-content-center align-items-center"
+                >
+                  A
+                </p>
+                <div class="ps-4">
+                  <p>ADA</p>
+                  <p class="text-muted">Cardano</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="fw-bold">
+              <div class="d-flex mt-5">
+                <p class="bg-white px-5 py-1 tab">TODAY</p>
+                <p class="yesterday px-5 py-1 tab">YESTERDAY</p>
+              </div>
+              <div
+                class="d-flex justify-content-between bg-white p-5 soft-shadow details-banner"
+              >
+                <div>
+                  <p class="text-muted">Pre-market</p>
+                  <h1 class="fw-bold">123</h1>
+                </div>
+
+                <div>
+                  <p class="text-muted">Previous close</p>
+                  <h1 class="fw-bold">123</h1>
+                  <p class="text-muted">June 16, 4.00pm</p>
+                </div>
+
+                <div>
+                  <p class="text-muted">Open</p>
+                  <h1 class="fw-bold">123</h1>
+                  <p class="text-muted">June 16, 4.00pm</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-5">
+              <div class="floating-banner bg-white soft-shadow p-5 fw-bold">
+                <p class="mb-3">Details</p>
+                <!-- loop stock info here  -->
+                <div class="d-flex justify-content-between">
+                  <p class="text-muted">Day's Range</p>
+                  <p>123</p>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                  <p class="text-muted">Day's Range</p>
+                  <p>123</p>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                  <p class="text-muted">Day's Range</p>
+                  <p>123</p>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <p class="text-muted">Day's Range</p>
+                    <p>123</p>
+                  </div>
+
+                  <div class="d-flex justify-content-between">
+                    <p class="text-muted">Day's Range</p>
+                    <p>123</p>
+                  </div>
+              </div>
+
+              <div class="floating-banner bg-white soft-shadow p-5" style="align-self: flex-start; ">
+                <div class="d-flex justify-content-between">
+                    <!-- Buying -->
+                  <div class="d-flex flex-column align-items-center">
+                    <p class="fw-bold text-muted">Buying</p>
+                    <h2 class="fw-bold">123</h2>
+                    <!-- Button trigger modal -->
+                    <button
+                      type="button"
+                      class="btn btn-purple"
+                      data-bs-toggle="modal"
+                      data-bs-target="#buyModal"
+                    >
+                      Buy
+                    </button>
+
+                    <!-- Modal -->
+                    <div
+                      class="modal fade"
+                      id="buyModal"
+                      tabindex="-1"
+                      aria-labelledby="exampleModalLabel"
+                      aria-hidden="true"
+                    >
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">
+                              Please specify quantity to purchase
+                            </h5>
+                            <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                            ></button>
+                          </div>
+                          <div class="modal-body">
+                              <input type="text" class="filter-bar">
+                          </div>
+                          <div class="modal-footer">
+                            <button
+                              type="button"
+                              class="btn btn-secondary"
+                              data-bs-dismiss="modal"
+                            >
+                              Close
+                            </button>
+                            <button type="button" class="btn btn-success">
+                              Buy
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Selling -->
+                  <div class="d-flex flex-column align-items-center">
+                    <p class="fw-bold text-muted">Selling</p>
+                    <h2 class="fw-bold">123</h2>
+                    <!-- Button trigger modal -->
+                    <button
+                      type="button"
+                      class="btn btn-light-purple"
+                      data-bs-toggle="modal"
+                      data-bs-target="#sellModal"
+                    >
+                      Sell
+                    </button>
+
+                    <!-- Modal -->
+                    <div
+                      class="modal fade"
+                      id="sellModal"
+                      tabindex="-1"
+                      aria-labelledby="exampleModalLabel1"
+                      aria-hidden="true"
+                    >
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel1">
+                              Please specify quantity to sell
+                            </h5>
+                            <button
+                              type="button"
+                              class="btn-close"
+                              data-bs-dismiss="modal"
+                              aria-label="Close"
+                            ></button>
+                          </div>
+                          <div class="modal-body">
+                              <input type="text" class="filter-bar">
+                          </div>
+                          <div class="modal-footer">
+                            <button
+                              type="button"
+                              class="btn btn-secondary"
+                              data-bs-dismiss="modal"
+                            >
+                              Close
+                            </button>
+                            <button type="button" class="btn btn-success">
+                              Sell
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

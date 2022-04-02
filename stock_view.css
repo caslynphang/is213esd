@@ -219,7 +219,7 @@ tr:hover {
 .filter-bar {
   padding: 1rem;
   border-radius: 0.5rem;
-  border: solid 1px black;
+  border: 0px;
   margin-right: 1rem;
   background-color: #EDEEF5;
 }
@@ -230,7 +230,7 @@ tr:hover {
 
 .black-bg {
   background-color: black;
-  position: fixed;
+  position: absolute;
   height: 338px;
   z-index: -1;
 }
@@ -240,4 +240,38 @@ tr:hover {
   border-radius: 1rem;
   width: 100%;
   padding: 0 !important;
+}
+
+.tab {
+  border-radius: 0.3rem 0.3rem 0 0;
+  font-size: 0.7rem;
+}
+
+.details-banner {
+  border-radius: 0 0.5rem 0.5rem 0.5rem;
+}
+
+.floating-banner {
+  border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
+  width: 47%;
+  align-self: flex-start; 
+}
+
+.yesterday {
+  background-color: #424242;
+  color: #a1a1a1;
+}
+
+.btn-purple {
+  background-color: #4C56E9;
+  color: white;
+  padding: 0.3rem 2.5rem;
+  font-weight: bold;
+}
+
+.btn-light-purple {
+  background-color: #D5D7FE;
+  color: #0C17AF;
+  font-weight: bold;
+  padding: 0.3rem 2.5rem;
 }
