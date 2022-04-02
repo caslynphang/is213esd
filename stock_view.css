@@ -247,6 +247,10 @@ tr:hover {
   font-size: 0.7rem;
 }
 
+.tab:hover {
+  cursor: pointer;
+}
+
 .details-banner {
   border-radius: 0 0.5rem 0.5rem 0.5rem;
 }
@@ -269,9 +273,18 @@ tr:hover {
   font-weight: bold;
 }
 
+.btn-purple:hover {
+  color: white;
+  background-color: #202897;
+}
+
 .btn-light-purple {
   background-color: #D5D7FE;
   color: #0C17AF;
   font-weight: bold;
   padding: 0.3rem 2.5rem;
+}
+
+.btn-light-purple:hover {
+  background-color: #efefff;
 }
