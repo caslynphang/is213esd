@@ -18,7 +18,6 @@ $(document).ready(function(){
         //5. axios call to stockinfo.py
         axios.get(url, {
             params: {
-                stockName: stockName,
             }
         })
     
@@ -35,42 +34,40 @@ $(document).ready(function(){
             //8. showing buy info
             $("#buy_info").show()
 
+        //************************ BUY BUTTON LOGIC ******************************************
+
+        //9. Function if user clicks buy
+        $("#buy").click(function(){
+
+            console.log("clicked");
+
+            //11. preparing url for POST Axios call to place_order.py
+            url = "http://127.0.0.1:5001/place_order/buy";
+
+            // console.log(url);
+
+            axios.post(url, {
+                // Used Dummy data first, need to extract from user input
+                params: {
+                    "ticker": "TSLA",
+                    "price": 800.5,
+                    "quantity:": 5,
+                    "order_type": "buy",
+                    "portfolio_id": 1
+                }
+            })
             
-            //************************ BUY BUTTON LOGIC ******************************************
-
-            //9. Function if user clicks buy
-            $("#buy").click(function(){
-
-                //10. Extract quantity inputted into field
-                var quantity = $("#quantity").val();
-
-                //10. prepare data to be passed to place_order microservice
-                var result_to_pass = ticker + "&" + price  + "&" + quantity;
-
-                //11. preparing url for POST Axios call to place_order.py
-                url = "http://127.0.0.1:5001/place_order/buy/";
-
-                url = url + result_to_pass
-
-                // console.log(url);
-
-                axios.post(url, {
-                    params: {
-
-                    }
-                })
-                
-                .then(response => {
-                    console.log(response.data);
-                })
-                
-                .catch(error => {
-                    console.log(error.message);
-                })
-
+            .then(response => {
+                console.log(response.data);
+            })
+            
+            .catch(error => {
+                console.log(error.message);
             })
 
-            //************************ BUY BUTTON LOGIC ******************************************
+        })
+
+        //************************ BUY BUTTON LOGIC ******************************************
 
         })
     
