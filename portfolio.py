@@ -1,12 +1,10 @@
-#addportfolio
-#getportfolio
-#updatepositions -- total bought value and total current value
-#getpositions
-
 from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import logging
+from sqlalchemy.types import TypeDecorator, CHAR
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
@@ -16,53 +14,69 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications require extra memory and is not necessary in this case
  
 db = SQLAlchemy(app) #initialization of connection, stored in variable db
- 
-class Portfolio(db.Model):
-    __tablename__ = 'portfolio'
 
 
-    portfolio_id = db.Column(db.Integer, primary_key = True)
-    first_name = db.Column(db.String(45), nullable=False)
-    last_name = db.Column(db.String(45), nullable=False)
-    dob = db.Column(db.String(45), nullable=False)
+class GUID(TypeDecorator): #for generation of uuid
+    """Platform-independent GUID type.
+
+    Uses PostgreSQL's UUID type, otherwise uses
+    CHAR(32), storing as stringified hex values.
+
+    """
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            return dialect.type_descriptor(UUID())
+        else:
+            return dialect.type_descriptor(CHAR(32))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return str(value)
+        else:
+            if not isinstance(value, uuid.UUID):
+                return "%.32x" % uuid.UUID(value).int
+            else:
+                # hexstring
+                return "%.32x" % value.int
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        else:
+            if not isinstance(value, uuid.UUID):
+                value = uuid.UUID(value)
+            return value
+
+
+class Portfolios(db.Model):
+    __tablename__ = 'portfolios'
+
+
+    portfolio_id = db.Column(GUID(), primary_key = True, default=uuid.uuid4()) #char(32) in mysql
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     time_created = db.Column(db.DateTime(), nullable=False)
     last_updated = db.Column(db.DateTime(), nullable = False)
+    positions = db.relationship('Positions', backref = 'portfolio', cascade = 'all, delete') #for use in sqlalchemy
  
-    def __init__(self, portfolio_id, first_name, last_name, dob, time_created, last_updated): #constructor. initializes record
+    def __init__(self, portfolio_id, user_id, time_created, last_updated): #constructor. initializes record
         self.portfolio_id = portfolio_id
-        self.first_name = first_name
-        self.last_name = last_name
-        self.dob = dob
+        self.user_id = user_id
         self.time_created = time_created
         self.last_updated = last_updated
  
     def json(self): #returns json representation of the table in dict form
-        return {"portfolio_id": self.portfolio_id, "first_name":self.first_name, "last_name": self.last_name, "dob": self.dob, "time_created": self.time_created, "last_updated":self.last_updated} 
-
-class Positions(db.Model):
-    __tablename__ = 'positions'
+        return {"portfolio_id": self.portfolio_id, "user_id": self.user_id, "time_created": self.time_created, "last_updated":self.last_updated} 
 
 
-    portfolio_id = db.Column(db.Integer, db.ForeignKey('portfolio.portfolio_id'), primary_key = True)
-    ticker = db.Column(db.String(45), nullable = False, primary_key = True)
-    total_bought_at = db.Column(db.Float(), nullable = False)
-    quantity = db.Column(db.Integer, nullable = False)
-    last_updated = db.Column(db.DateTime(), nullable = False)
- 
- 
-    def __init__(self, portfolio_id, ticker, total_bought_at, quantity, last_updated): #constructor. initializes record
-        self.portfolio_id = portfolio_id
-        self.ticker = ticker
-        self.total_bought_at = total_bought_at
-        self.quantity = quantity
-        self.last_updated = last_updated
- 
-    def json(self): #returns json representation of the table in dict form
-        return {"portfolio_id": self.portfolio_id, "ticker":self.ticker, "total_bought_at": self.total_bought_at, "quantity": self.quantity, "last_updated": self.last_updated} 
 
-@app.route("/portfolios")
+@app.route("/get_all_portfolios") #get all portfolios
 def get_all():
-    portfolios = Portfolio.query.all() #SQLAlchemy magic
+    portfolios = Portfolios.query.all() #SQLAlchemy magic
     if len(portfolios):
         return jsonify(
             {
@@ -80,9 +94,9 @@ def get_all():
     ), 404 #if status code is not specified, 200 OK is returned by default -- hence error 404 code is needed.
 
 
-@app.route("/portfolios/<string:portfolio_id>")
+@app.route("/get_portfolio/<string:portfolio_id>")
 def find_by_portfolio_id(portfolio_id):
-    portfolio = Portfolio.query.filter_by(portfolio_id=portfolio_id).first() #returns a list of 1 item, .first() gets the first item. similar to limit 1 in sql
+    portfolio = Portfolios.query.filter_by(portfolio_id=portfolio_id).first() #returns a list of 1 item, .first() gets the first item. similar to limit 1 in sql
     if portfolio:
         return jsonify(
             {
@@ -90,114 +104,121 @@ def find_by_portfolio_id(portfolio_id):
                 "data": portfolio.json()
             }
         )
+
     return jsonify(
         {
             "code": 404,
-            "message": "Portfolio not found."
+            "message": f"Portfolio {portfolio_id} not found"
         }
     ), 404
 
-@app.route("/portfolios/add", methods=['POST'])
-def create_portfolio(): #create portfolio
-    '''
-    if (Portfolio.query.filter_by(isbn13=isbn13).first()):
+@app.route("/<string:user_id>/add_portfolio", methods=['POST'])
+def create_portfolio(user_id): #create portfolio
+
+    try:
+        #query user
+        #user don't exist: throw error
+        #return 404 error coz user dont exist
+        #use invokes and endpoint for user
+        #else:
+        portfolio = Portfolios(user_id = user_id, time_created = datetime.now(), last_updated = datetime.now()) #portfolio_id auto generated
+
+        db.session.add(portfolio)
+        #add portfolio to user
+        db.session.commit()
         return jsonify(
             {
-                "code": 400,
-                "data": {
-                    "isbn13": isbn13
-                },
-                "message": "Book already exists."
+                "code": 201,
+                "data": portfolio.json()
             }
-        ), 400
+        ), 201
 
-        '''
-
-    data = request.get_json()
-
-    portfolio = Portfolio(**data, time_created = datetime.now(), last_updated = datetime.now() )
-
-
-    db.session.add(portfolio)
-    db.session.commit()
-    '''
     except:
         return jsonify(
             {
                 "code": 500,
                 "data": {
-                    "isbn13": isbn13
+                    "user_id": user_id
                 },
-                "message": "An error occurred creating the book."
+                "message": "An error occurred creating the porfolio for this user."
             }
         ), 500
-        '''
-
-    return jsonify(
-        {
-            "code": 201,
-            "data": portfolio.json()
-        }
-    ), 201
 
 
-@app.route("/portfolios/<string:portfolio_id>/order", methods = ['PUT']) #default method is GET unless specified 
-def buy_sell_positions(portfolio_id):
-    if (Portfolio.query.filter_by(portfolio_id = portfolio_id)): #portfolio found
-            data = request.get_json() #gets json data from the body of the request
-            ##getting values from request json body
-            order_type = data['order_type']
-            ticker = data['ticker']
-            quantity = data['quantity']
-            buy_price = data['price']
 
-            to_update = Portfolio.query.filter_by(portfolio_id = portfolio_id) #get portfolio to update
+@app.route("/update_portfolio/<string:portfolio_id>", methods = ['PUT'])
+def update_portfolio(portfolio_id):
+    try:
+        if (Portfolios.query.filter_by(portfolio_id = portfolio_id).first()): #book found
+                data = request.get_json() #gets json data from the body of the request
+                to_update = Portfolios.query.filter_by(portfolio_id = portfolio_id).first().get()
+                to_update.last_updated = datetime.now()
 
-            position_to_update = Positions.query.filter_by(portfolio_id = portfolio_id, ticker = ticker).first() #get position record to update
+                #the other fields of portfolio should not have any changes since they are mostly keys, and time_created of a portfolio should never change
 
-            if order_type == "buy": #check for order type
-                if position_to_update != None: #if position exists ie user has already bought into positions for the ticker before
-                    position_to_update.quantity += quantity #add on qty
-                    position_to_update.total_bought_at += quantity * buy_price #add on total buy in value
-                    position_to_update.last_updated = datetime.now() #set last_updated to time at which request was made for the specific position
-                    to_update.last_updated = datetime.now() #set last_updated to time at which portfolio, including its positions had any form of modification
-                    db.session.commit() #make changes
-                    return jsonify( 
-                        {
-                            "code" : 201,
-                            "data": position_to_update.json()
-                        }
-                    ), 201
-                else: #if position does not exist, ie user has not bought into position before
-                    add_position = Positions(portfolio_id = portfolio_id, ticker = ticker, total_bought_at = (quantity * buy_price), quantity = quantity, last_updated = datetime.now()) #create position record to be added to db
-                    db.session.add(add_position)
-                    db.session.commit()
-                    return jsonify( #return added_position
-                        {
-                            "code" : 200,
-                            "data": add_position.json() 
-                        }
-                    ), 200
-
-@app.route("/<string:portfolio_id>/positions") #get all positions by portfolio_id
-def get_positions(portfolio_id):
-    positions = Positions.query.filter_by(portfolio_id = portfolio_id)#SQLAlchemy magic
-    if positions:
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    "positions": [position.json() for position in positions] #returns list of portfolios in json format
+                return jsonify( #portfolio successfully updated
+                    {
+                        "code": 201,
+                        "data": to_update.json()
+                    }
+                ), 201 
+        else:
+            return jsonify( #portfolio not found
+                {
+                    "code": 404,
+                    "message": f"Portfolio {portfolio_id} not found"
                 }
+            ), 404
+    except:
+        return jsonify( #error in updating
+            {
+                "code": 500,
+                "data": {
+                    "portfolio_id" : portfolio_id
+                },
+            "message": f"An error occured updating the time for portfolio {portfolio_id}"
             }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "message": "There are no portfolios."
-        }
-    ), 404 #if status code is not specified, 200 OK is returned by default -- hence error 404 code is needed.
+        ), 500
 
+
+
+
+@app.route("/delete_portfolio/<string:portfolio_id>", methods=['DELETE'])
+def delete_portfolio(portfolio_id):
+    try:
+        portfolio = Portfolios.query.filter_by(portfolio_id=portfolio_id).first()
+        if portfolio:
+            db.session.delete(portfolio)
+            db.session.commit()
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "portfolio_id": portfolio_id
+                    },
+                    "message": f"Portfolio {portfolio_id} deleted"
+                }
+            )
+        else:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {
+                        "portfolio_id": portfolio_id
+                    },
+                    "message": f"Portfolio {portfolio_id} not found"
+                }
+            ), 404
+    except:
+            return jsonify(
+                {
+                    "code": 500,
+                    "data": {
+                        "portfolio_id": portfolio_id
+                    },
+                    "message": f"An error occured when trying to delete portfolio {portfolio_id}"
+                }
+            )
 
 
 if __name__ == "__main__":
