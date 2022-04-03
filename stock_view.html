@@ -25,6 +25,13 @@
       crossorigin="anonymous"
     ></script>
 
+    <!-- JQuery CDN -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
     <!-- file CSS -->
     <link rel="stylesheet" href="stock_view.css" />
   </head>
@@ -48,7 +55,11 @@
               class="searchbar d-flex align-items-center py-3 px-4 rounded-pill mt-4"
             >
               <img src="./images/search.png" class="h-100 pe-2" alt="" />
-              <input type="text" placeholder="Search stock" class="search-input"/>
+              <input
+                type="text"
+                placeholder="Search stock"
+                class="search-input"
+              />
             </div>
 
             <!-- credit cards -->
@@ -108,12 +119,18 @@
                 <p class="m-0">Stock <br />Market</p>
               </a>
 
-              <a href="portfolio_view.html" class="col services rounded text-center mx-2 py-3">
+              <a
+                href="portfolio_view.html"
+                class="col services rounded text-center mx-2 py-3"
+              >
                 <img src="images/portfolio.png" alt="" class="mb-2" />
                 <p class="m-0">Portfolio</p>
               </a>
 
-              <a href="stock_recommender_view.html" class="col services rounded text-center mx-2 py-3">
+              <a
+                href="stock_recommender_view.html"
+                class="col services rounded text-center mx-2 py-3"
+              >
                 <img src="images/thumbs_up.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
@@ -133,9 +150,9 @@
                 <th>Buy</th>
                 <th>Volume</th>
               </tr>
-              
+
               <!-- populate stock data -->
-              <tr>
+              <tr id="selected_stock">
                 <td>
                   <div class="d-flex">
                     <p
@@ -144,7 +161,7 @@
                       A
                     </p>
                     <div class="ps-4">
-                      <p>ADA</p>
+                      <p class="ticker">ADA</p>
                       <p class="text-muted">Cardano</p>
                     </div>
                   </div>
@@ -162,5 +179,9 @@
 </html>
 
 <script>
-  
+  $("#selected_stock").click(function () {
+    var ticker = $("#selected_stock").find(".ticker").text();
+    console.log(ticker);
+    window.location.href = "single_stock_view.html?ticker=" + ticker;
+  });
 </script>
