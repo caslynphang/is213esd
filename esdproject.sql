@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `positions` (
   `portfolio_id` int(11) NOT NULL,
   `ticker` varchar(45) NOT NULL,
   `total_bought_at` float NOT NULL,
+  `total_sold_at` float NOT NULL,
   `quantity` int(11) NOT NULL,
   `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   KEY `positions_portfolio_id_fk` (`portfolio_id`)
