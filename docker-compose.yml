@@ -5,19 +5,6 @@ volumes:
 
 services:
 
-  ###################################
-  # Order: The Order microservice
-  ###################################
-  # order:
-  #   build:
-  #     context: ./
-  #     dockerfile: order.Dockerfile
-  #   image: jordanteoh2020/order:esd
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/order
-  #     PYTHONUNBUFFERED: 1
-
   #######################################################
   # Portfolio : The Portfolio microservice (Done)
   #######################################################
@@ -109,3 +96,42 @@ services:
     environment:
       polygon_URL: https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2022-03-25?adjusted=true&apiKey=
       PYTHONUNBUFFERED: 1
+
+  ###################################
+  # Positions : The Positions microservice
+  ###################################
+  # positions:
+  #   build:
+  #     context: ./
+  #     dockerfile: positions.Dockerfile
+  #   image: jordanteoh2020/positions:esd
+  #   restart: always
+  #   environment:
+  #     dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
+  #     PYTHONUNBUFFERED: 1
+
+    ###################################
+  # Stock Recommender : The Stock Recommender microservice
+  ###################################
+  # stock_recommender:
+  #   build:
+  #     context: ./
+  #     dockerfile: stock_recommender.Dockerfile
+  #   image: jordanteoh2020/stock_recommender:esd
+  #   restart: always
+  #   environment:
+  #     URL: http://127.0.0.1:5000/stockinfo/get_all_stock_info/
+  #     PYTHONUNBUFFERED: 1
+
+    ###################################
+  # User : The User microservice
+  ###################################
+  # user:
+  #   build:
+  #     context: ./
+  #     dockerfile: user.Dockerfile
+  #   image: jordanteoh2020/user:esd
+  #   restart: always
+  #   environment:
+  #     dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
+  #     PYTHONUNBUFFERED: 1
