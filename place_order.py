@@ -87,13 +87,21 @@ def buy():
 
             update_position_json = {portfolio_id: position_json["portfolio_id"], ticker: position_json["ticker"], total_bought_at: new_total_bought_at, total_quantity: new_total_quantity, last_bought_price: new_last_bought_price, last_sold_price: position_json["last_sold_price"], last_updated_price: new_last_updated_price, last_transaction_status: new_last_transaction_status, last_transaction_quantity: new_last_transaction_quantity, last_updated: position_json["last_updated"]}
 
-            #call update positions function to update postiion record in positions table
+            #call update positions function to update position record in positions table
 
             url = "http://127.0.0.1:5000/update_position/" + front_end_json["portfolio_id"]
 
-            update_validation = invoke_http(url, method='PUT', json = update_position_json, **kwargs)
+            position_update_validation = invoke_http(url, method='PUT', json = update_position_json, **kwargs)
 
-            return update_validation
+            #update portfolio timing
+
+            url = "http://127.0.0.1:5000/update_portfolio/" + front_end_json["portfolio_id"]
+
+            portfolio_update_validation = invoke_http(url, method='PUT', **kwargs)
+
+
+
+            return position_update_validation
 
     else:
         return "Invalid Portfolio ID!"
@@ -124,35 +132,69 @@ def buy():
                 }
         ), 500
 
-# 4. route "sell" function for frontend Axios call with ticker symbol and amount passed through parameter "ticker_amount_quantity"
-# 4.1 format for ticker_amount_quantity parameter to be passed from frontend - "ticker&price&quantity" - Example - "TSLA&800&8"
-@app.route("/place_order/sell/<string:ticker_amount_quantity>", methods=['POST'])
-def sell(ticker_amount_quantity):
+
+@app.route("/place_order/sell", methods=['POST'])
+def sell():
     
-    #5. extracting individual ticker and amount bought
-    ticker = ticker_amount_quantity.split("&")[0]
-    price = float(ticker_amount_quantity.split("&")[1])
-    quantity = int(ticker_amount_quantity.split("&")[2])
-    
+    #2. extracting data from json request
+    front_end_json = request.get_json()
+    front_end_json = front_end_json['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
+    return front_end_json
 
-    #5.1 Preparing buy_information in JSON format to be sent to portfolio microservice
-    sell_information = {"ticker": ticker, "price": price, "quantity:" : quantity, "order_type" : "sell"}
+    #3 check if portfolio is valid
+    url = "http://127.0.0.1:5000/get_portfolio/" + front_end_json["portfolio_id"]
 
-    sell_information_json = json.dumps(sell_information)
+    portfolio_validation = invoke_http(url, method='GET', **kwargs)
 
-    #5.2 Temporary return statement for testing purposes
-    return sell_information
+    if(portfolio_validation["code"] != 404): #portfolio valid!
 
-    #6. invoke portfolio microservice using invoke_http function imported from invokes.py -- see line 2
-    
-    #6.1 insert url to call portfolio microservice
-    # format: http://127.0.0.1:5000/portfolios/<portfolio_id>/order **Ask XE how to get portfolio ID
-    url = "#"
-    
-    #6.2 invoking the portfolio microservice with buy information passed in as json argument
-    result = invoke_http(url, method='POST', json=sell_information_json, **kwargs)
+        #4. invoke positions microservice to check if current portfolio has position of ticker inputted
+        url = "http://127.0.0.1:5000/get_positions/" + front_end_json['portfolio_id'] + "/" + front_end_json["ticker"]
 
-    return result
+        position_validation = invoke_http(url, method='GET', **kwargs)
+
+        if(position_validation["code"] == 404):
+            #No initial positions: no positions to sell
+
+            return "No positions to sell!"
+            
+        else:
+            #portfolio already has some positions of requested ticker: check if current positions > quantity intended to sell
+
+            #creating new json for updating quantity
+            position_json = position_validation["data"]
+
+            if(position_json["total_quantity"] < front_end_json["quantity"]):
+                
+                return "Not enough positions to sell!"
+            
+            else:
+                new_total_bought_at = position_validation["total_bought_at"] - (front_end_json["price"] * front_end_json["quantity"])
+                new_total_quantity = position_validation["total_quantity"] - front_end_json["quantity"]
+                new_last_sold_price = front_end_json["price"]
+                new_last_updated_price = front_end_json["price"]
+                new_last_transaction_status = "sell"
+                new_last_transaction_quantity = front_end_json["quantity"]
+
+                update_position_json = {portfolio_id: position_json["portfolio_id"], ticker: position_json["ticker"], total_bought_at: new_total_bought_at, total_quantity: new_total_quantity, last_bought_price: position_json["last_bought_price"], last_sold_price: new_last_sold_price, last_updated_price: new_last_updated_price, last_transaction_status: new_last_transaction_status, last_transaction_quantity: new_last_transaction_quantity, last_updated: position_json["last_updated"]}
+
+                #call update positions function to update position record in positions table
+
+                url = "http://127.0.0.1:5000/update_position/" + front_end_json["portfolio_id"]
+
+                position_update_validation = invoke_http(url, method='PUT', json = update_position_json, **kwargs)
+
+                #update portfolio timing
+
+                url = "http://127.0.0.1:5000/update_portfolio/" + front_end_json["portfolio_id"]
+
+                portfolio_update_validation = invoke_http(url, method='PUT', **kwargs)
+
+                return position_update_validation
+
+    else:
+        return "Invalid Portfolio ID!"
+
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
