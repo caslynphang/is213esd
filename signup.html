@@ -24,6 +24,13 @@
       crossorigin="anonymous"
     ></script>
 
+    <!-- JQuery CDN -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
     <!-- file CSS -->
     <link rel="stylesheet" href="login.css" />
   </head>
@@ -54,20 +61,22 @@
 
         <hr class="mb-4" />
 
-        <p class="login-label">First Name</p>
-        <input type="text" />
-        <p class="login-label">Last Name</p>
-        <input type="text" />
-        <p class="login-label">Email</p>
-        <input type="text" />
-        <p class="login-label">Password</p>
-        <input type="text" />
+        <p class="login-label" >First Name</p>
+        <input type="text" id="first_name"/>
+        <p class="login-label" >Last Name</p>
+        <input type="text" id="last_name"/>
+        <p class="login-label" >Email</p>
+        <input type="text" id="email"/>
+        <p class="login-label" >Password</p>
+        <input type="text" id="password"/>
 
         <div class="mb-2 mt-2">
-          <button>Sign Up</button>
+          <button id="sign-up">Sign Up</button>
         </div>
 
-        <p class="subtext">Already have an account? <a href="login.html">Login</a></p>
+        <p class="subtext">
+          Already have an account? <a href="login.html">Login</a>
+        </p>
       </div>
     </div>
     <iframe
@@ -78,3 +87,66 @@
     ></iframe>
   </body>
 </html>
+
+<script>
+  $("#sign-up").click(function () {
+    // alert("Handler for .click() called.");
+    const url = "http://127.0.0.1:5000/add_user";
+
+    var first_name = $("#first_name").val();
+    var last_name = $("#last_name").val();
+    var email = $("#email").val();
+    var password = $("#password").val();
+
+    // console.log(first_name, last_name, email, password);
+    // fail;
+    axios
+      .post(url, {
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        // process response.dataobject
+        // console.log(typeof(response.data))
+        console.log(response.data);
+        var result = response.data;
+
+        this.email_error = "";
+        this.password_error = "";
+
+        // if no error, then no error msg
+        var email_error = result.email;
+        var password_error = result.password;
+        // console.log(email_error,password_error)
+
+        // if got error, then set error msg in data variable
+        if (result.email != undefined) {
+          this.email_error = email_error;
+        }
+        if (this.email == "") {
+          this.email_error = "Please enter your email.";
+        }
+        if (result.password != undefined) {
+          this.password_error = password_error;
+        }
+
+        // if no error, redirect to homepage
+        if (result == "") {
+          $(".scrolling").append(
+            "<p class='succeed-text'>Account successfully created. Redirecting you to the Homepage... </p>"
+          );
+          $(".scrolling").scrollTop($(".scrolling")[0].scrollHeight);
+
+          setTimeout(function () {
+            window.location.replace("stock_view.html");
+          }, 5000);
+        }
+      })
+      .catch((error) => {
+        // process error object
+        console.log("error");
+      });
+  });
+</script>

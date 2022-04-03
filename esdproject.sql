@@ -21,8 +21,9 @@ SET time_zone = "+00:00";
 -- Database: `esdproject`
 --
 
--- CREATE DATABASE esdproject; *****Uncomment for final submission*******
-
+DROP DATABASE IF EXISTS esdproject;
+CREATE DATABASE esdproject;
+USE esdproject;
 -- --------------------------------------------------------
 
 --
