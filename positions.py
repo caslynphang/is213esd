@@ -80,6 +80,7 @@ class Positions(db.Model):
         self.last_transaction_status = last_transaction_status
         self.last_transaction_quantity = last_transaction_quantity
         self.last_updated = last_updated
+        #missing last_updated_price, dk if intentional - Jet
  
     def json(self): #returns json representation of the table in dict form
         return {"portfolio_id": self.portfolio_id, "ticker":self.ticker, "total_bought_at": self.total_bought_at, "quantity": self.quantity, "last_bought_price": self.last_bought_price, "last_sold_price": self.last_sold_price, "last_updated": self.last_updated} 

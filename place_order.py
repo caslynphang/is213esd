@@ -43,26 +43,62 @@ db = SQLAlchemy(app) #initialization of connection, stored in variable db """
 def buy():
     
     #2. extracting data from json request
-    data = request.get_json()
-    data = data['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
-    return data
+    front_end_json = request.get_json()
+    front_end_json = front_end_json['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
+    return front_end_json
 
-    #3. invoke positions microservice to check if current portfolio has position 
-    #       using invoke_http function imported from invokes.py -- see line 2
-    
-    #3.1 insert url to call positions microservice
-    # format: http://127.0.0.1:5000/get_positions/<string:portfolio_id>/<string:ticker>
-    url = "http://127.0.0.1:5000/get_positions/" + data['portfolio_id'] + "/" + data["ticker"]
-    
-    #3.2 invoking the position microservice to check if portfolio already has position
-    result = invoke_http(url, method='POST', **kwargs)
+    #3 check if portfolio is valid
+    url = "http://127.0.0.1:5000/get_portfolio/" + front_end_json["portfolio_id"]
 
-    if(result["code"] == 404):
-        #add ticker to portolio
+    portfolio_validation = invoke_http(url, method='GET', **kwargs)
+
+    if(portfolio_validation["code"] != 404): #portfolio valid!
+
+        #4. invoke positions microservice to check if current portfolio already has position 
+        url = "http://127.0.0.1:5000/get_positions/" + front_end_json['portfolio_id'] + "/" + front_end_json["ticker"]
+
+        position_validation = invoke_http(url, method='GET', **kwargs)
+
+        if(position_validation["code"] == 404):
+            #No initial positions: add quantity of new positions to positions table
+
+            url = "http://127.0.0.1:5000/add_position/" + front_end_json["portfolio_id"]
+            
+            add_position_validation = invoke_http(url, method='POST', json=front_end_json, **kwargs)
+
+            if(add_position_validation["code"] == 200):
+                return "Order Filled!"
+
+            else:
+                return "Something went wrong, please try again!"
+            
+        else:
+            #portfolio already has some positions of requested ticker: update number of positions already in portfolio
+
+            #creating new json for updating quantity
+            position_json = position_validation["data"]
+
+            new_total_bought_at = position_validation["total_bought_at"] + (front_end_json["price"] * front_end_json["quantity"])
+            new_total_quantity = position_validation["total_quantity"] + front_end_json["quantity"]
+            new_last_bought_price = front_end_json["price"]
+            new_last_updated_price = front_end_json["price"]
+            new_last_transaction_status = "buy"
+            new_last_transaction_quantity = front_end_json["quantity"]
+
+            update_position_json = {portfolio_id: position_json["portfolio_id"], ticker: position_json["ticker"], total_bought_at: new_total_bought_at, total_quantity: new_total_quantity, last_bought_price: new_last_bought_price, last_sold_price: position_json["last_sold_price"], last_updated_price: new_last_updated_price, last_transaction_status: new_last_transaction_status, last_transaction_quantity: new_last_transaction_quantity, last_updated: position_json["last_updated"]}
+
+            #call update positions function to update postiion record in positions table
+
+            url = "http://127.0.0.1:5000/update_position/" + front_end_json["portfolio_id"]
+
+            update_validation = invoke_http(url, method='PUT', json = update_position_json, **kwargs)
+
+            return update_validation
+
     else:
-        #update number of positions already in portfolio
+        return "Invalid Portfolio ID!"
 
-    #3.3adding record to orders table
+    # adding record to orders table **Insert once above is tested successfully
     if(result == 200 or result == 201):
 
         time_placed = datetime.datetime.now()
