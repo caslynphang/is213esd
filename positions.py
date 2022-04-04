@@ -203,7 +203,26 @@ def update_position(portfolio_id):
     try:
         if (Positions.query.filter_by(portfolio_id = portfolio_id, ticker = ticker).first()): #position found
                 to_update = Positions.query.filter_by(portfolio_id = portfolio_id).first() #get position record via query and filter
-                to_update = Positions(**data) #unpacks data and replaces the record that was gotten
+
+                to_update.total_quantity = 10
+                if data['last_bought_price']:
+                    to_update.last_bought_price = data['last_bought_price']
+                if data['last_sold_price']:
+                    to_update.last_sold_price = data['last_sold_price']
+                if data['last_transaction_quantity']:
+                    to_update.last_transaction_quantity = data['last_transaction_quantity']
+                if data['last_transaction_status']:
+                    to_update.last_transaction_status = data['last_transaction_status']
+                if data['last_updated_price']:
+                    to_update.last_updated_price = data['last_updated_price']
+                if data['total_bought_at']:
+                    to_update.total_bought_at = data['total_bought_at']
+                if data['total_quantity']:
+                    to_update.total_quantity = data['total_quantity'] 
+
+                to_update.last_updated = datetime.now()
+
+                db.session.commit()
 
                 return jsonify( #portfolio successfully updated
                     {
@@ -245,7 +264,6 @@ def delete_position(portfolio_id, ticker):
         deleted_position = Positions.query.filter_by(portfolio_id=portfolio_id, ticker = ticker).first()
         if deleted_position:
             db.session.delete(deleted_position)
-            deleted_position.portfolio.last_updated = datetime.now()
             db.session.commit()
             return jsonify(
                 {
