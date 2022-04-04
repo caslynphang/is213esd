@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from datetime import date, timedelta, datetime
 import requests
 import json
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
