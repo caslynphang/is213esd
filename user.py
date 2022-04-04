@@ -13,7 +13,7 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/esdproject' #dynamically retrieves db url
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/users' #dynamically retrieves db url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications require extra memory and is not necessary in this case
  
 db = SQLAlchemy(app) #initialization of connection, stored in variable db
@@ -68,7 +68,7 @@ class Users(UserMixin, db.Model):
     password_hash = db.Column(db.String())    
     time_created = db.Column(db.DateTime(), nullable=False)
     last_updated = db.Column(db.DateTime(), nullable = False)
-    portfolios = db.relationship('Portfolio', backref = 'user', cascade = 'all, delete')
+
  
     def __init__(self, user_id, first_name, last_name, email, time_created, last_updated): #constructor. initializes record
         self.user_id = user_id
