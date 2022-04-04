@@ -1,12 +1,14 @@
 from datetime import datetime
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.types import TypeDecorator, CHAR
-from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin, LoginManager
-
+from flask_login import UserMixin, LoginManager, current_user, login_user, logout_user
+from GUID import GUID
 import uuid
+
+import os,sys
+
 import logging
 
 logging.basicConfig()
@@ -18,50 +20,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications requi
  
 db = SQLAlchemy(app) #initialization of connection, stored in variable db
 login = LoginManager() #init of flask-login manager
+login.init_app(app)
+CORS(app)
 
-
-
-class GUID(TypeDecorator): #for generation of uuid
-    """Platform-independent GUID type.
-
-    Uses PostgreSQL's UUID type, otherwise uses
-    CHAR(32), storing as stringified hex values.
-
-    """
-    impl = CHAR
-    cache_ok = True
-
-    def load_dialect_impl(self, dialect):
-        if dialect.name == 'postgresql':
-            return dialect.type_descriptor(UUID())
-        else:
-            return dialect.type_descriptor(CHAR(32))
-
-    def process_bind_param(self, value, dialect):
-        if value is None:
-            return value
-        elif dialect.name == 'postgresql':
-            return str(value)
-        else:
-            if not isinstance(value, uuid.UUID):
-                return "%.32x" % uuid.UUID(value).int
-            else:
-                # hexstring
-                return "%.32x" % value.int
-
-    def process_result_value(self, value, dialect):
-        if value is None:
-            return value
-        else:
-            if not isinstance(value, uuid.UUID):
-                value = uuid.UUID(value)
-            return value
- 
-class Users(UserMixin, db.Model):
+class Users(db.Model, UserMixin):
     __tablename__ = 'users'
 
 
-    user_id = db.Column(GUID(), primary_key = True, default=uuid.uuid4()) #uuid, char(32) in mysql
+    user_id = db.Column(GUID(), primary_key = True, default=uuid.uuid4) #uuid, char(32) in mysql
     first_name = db.Column(db.String(120), nullable = False)
     last_name = db.Column(db.String(120), nullable = False)
     email = db.Column(db.String(120), unique = True, nullable = False)
@@ -69,9 +35,9 @@ class Users(UserMixin, db.Model):
     time_created = db.Column(db.DateTime(), nullable=False)
     last_updated = db.Column(db.DateTime(), nullable = False)
 
+
  
-    def __init__(self, user_id, first_name, last_name, email, time_created, last_updated): #constructor. initializes record
-        self.user_id = user_id
+    def __init__(self, first_name, last_name, email, time_created, last_updated): #constructor. initializes record
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
@@ -79,18 +45,22 @@ class Users(UserMixin, db.Model):
         self.last_updated = last_updated
     
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = generate_password_hash(password) #inbuilt from werkzeug security
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+        return check_password_hash(self.password_hash, password) #inbuilt from werkzeug security
  
     def json(self): #returns json representation of the table in dict form
         return {"user_id": self.user_id, "first_name": self.first_name, "last_name": self.last_name, "email": self.email, "time_created": self.time_created, "last_updated":self.last_updated} 
 
+    def get_id(self):
+        return str(self.user_id)
+
+
 
 @login.user_loader
-def load_user(id):
-    return Users.query.get(id)
+def load_user(user_id):
+    return Users.query.get(user_id) #usermixin will convert int user_id to str
 
 
 
@@ -132,8 +102,20 @@ def get_user_by_email(email):
         }
     ), 404
 
-@app.route("/add_user", methods=['POST'])
-def add_user(): #create user
+@app.route("/for_login/<string:email>") #for login purposes, since it has to work with user object
+def for_login(email):
+    user = Users.query.filter_by(email=email).first() #returns a list of 1 item, .first() gets the first item. similar to limit 1 in sql
+    if user != None:
+        return user
+    return jsonify(
+        {
+            "code": 404,
+            "message": f"No user with {email} not found"
+        }
+    ), 404
+
+
+def add_user(data): #create user
     data = request.get_json()
     first_name = data['first_name']
     last_name = data['last_name']
@@ -142,28 +124,40 @@ def add_user(): #create user
 
 
     try:
-        user = Users(first_name = first_name, last_name = last_name, email = email, password = password, time_created = datetime.now(), last_updated = datetime.now()) #user_id auto generated
+        if Users.query.filter_by(email = email).first():
+            return {
+                    "code": 400,
+                    "data": {
+                        "email": "email"
+                    },
+                    "message": "User account already exists for this email. Please log in instead"
+                }
 
-        db.session.add(user)
-        #add user to user table
+
+        user = Users(first_name = first_name, last_name = last_name, email = email, time_created = datetime.now(), last_updated = datetime.now()) #user_id auto generated
+        user.set_password(password) #make use of hashing/salting funct via custom set_password funct defined in user class
+        db.session.add(user)         #add user to user table
         db.session.commit()
-        return jsonify(
-            {
+        return {
                 "code": 201,
                 "data": user.json() #show user info added to db
             }
-        ), 201
+        
 
     except:
-        return jsonify(
-            {
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        ex_str = str(exc_obj) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+        print(ex_str)
+
+        return {
                 "code": 500,
                 "data": {
                     "email": email
                 },
                 "message": "An error occurred while creating this user account."
             }
-        ), 500
+
 
 
 @app.route("/update_user", methods = ['PUT'])
@@ -250,8 +244,73 @@ def delete_user(email):
                     },
                     "message": f"An error occured when trying to delete user {email}"
                 }
-            )
+            ), 500
 
+
+
+@app.route("/login", methods = ['POST', 'GET']) #retrieve user object, do comparison, render page
+def login():
+    try:
+        if current_user.is_authenticated: #if authenticated, redirect to user home page 
+            return "Authenticated"
+        if request.method == 'POST': #if a new login req is made with post
+            data = request.get_json()
+            email = data['email']
+            password = data['password']
+            user = Users.query.filter_by(email = email).first()#get user object based off email since email is unique
+            if user is not None and user.check_password(password): #if user is found and password is verified. check_password method from user obj, will compared pw
+                login_user(user) #login user with login_user 
+                return "Success" #redirect to home view
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        ex_str = str(exc_obj) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+        print(ex_str)
+        return ""
+
+
+
+@app.route("/signup", methods = ['POST']) 
+def signup():
+    if current_user.is_authenticated: #logout and go to signout page? maybe they wanna make new account, need to look into this
+        return "Authenticated"
+
+    if request.method == 'POST': #posting new user to register
+        data = request.get_json()
+        signup_results = add_user(data)
+        code = signup_results['code']
+
+        if code == 201: #successful register
+            return jsonify(
+                {
+                    "code": 201,
+                    "data":"Success"
+                }
+            ), 201
+    
+        elif code == 400:
+            return jsonify(
+                {
+                    "code": 400,
+                    "data":"Existing"
+                }
+            ), 400
+
+ #if not already authenticated or if post req not made, essentially just getting the login page, so return signup view
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return jsonify(
+        {
+            "code": 200,
+            "data":"Logout"
+        }
+    ), 200
+
+app.secret_key = "fd08462624b345138cfd113014ce76bb"
 
 if __name__ == '__main__':
     app.run(port=5002, debug=True)
+
+
