@@ -155,7 +155,7 @@
               </tr>
 
               <!-- populate stock data -->
-              <tr id="selected_stock" v-for="(ticker, index) of tickers">
+              <tr class="selected_stock" v-for="(ticker, index) of tickers">
                 <td>
                   <div class="d-flex">
                     <p
@@ -164,9 +164,9 @@
                       {{ticker.T.charAt(0)}}
                     </p>
                     <div class="ps-4">
-                      <p class="ticker">{{ticker.T}}</p>
+                      <p class="ticker" @click="select_stock(ticker.T)">{{ticker.T}}</p>
                       <!-- <p class="text-muted w-25">{{stock_name.at(index)}}</p> -->
-                      <p class="text-muted">  </p>
+                      <p class="text-muted"></p>
                     </div>
                   </div>
                 </td>
@@ -195,6 +195,14 @@
         tickers: [],
         stock_name: [],
       };
+    },
+    methods: {
+      select_stock(ticker_name) {
+        // var ticker_name = $(".selected_stock").find(".ticker").text();
+        console.log('dasa');
+        console.log(ticker_name);
+        window.location.href = "single_stock_view.html?ticker=" + ticker_name;
+      },
     },
     mounted: function () {
       // console.log('loaded');
@@ -228,7 +236,6 @@
                 // handle error
                 console.log(error);
               });
-
           }
 
           // this.tickers = tickers_arr;
@@ -241,9 +248,9 @@
     },
   }).mount("#app");
 
-  $("#selected_stock").click(function () {
-    var ticker = $("#selected_stock").find(".ticker").text();
-    console.log(ticker);
-    window.location.href = "single_stock_view.html?ticker=" + ticker;
-  });
+  // $(".selected_stock").click(function () {
+  //   var ticker_name = $("#selected_stock").find(".ticker").text();
+  //   console.log(ticker_name);
+  //   window.location.href = "single_stock_view.html?ticker=" + ticker;
+  // });
 </script>
