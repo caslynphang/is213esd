@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS positions.positions (
   `portfolio_id` char(32) NOT NULL,
   `ticker` varchar(120) NOT NULL,
   `total_bought_at` float NOT NULL,
+  `total_sold_at` float NOT NULL,
   `total_quantity` int(11) NOT NULL,
   `last_bought_price` float NOT NULL,
   `last_sold_price` float NOT NULL,
@@ -115,13 +116,14 @@ CREATE DATABASE orders;
 
 DROP TABLE IF EXISTS orders.orders;
 CREATE TABLE IF NOT EXISTS orders.orders (
+  `quantity` int NOT NULL,
   `portfolio_id` char(32) NOT NULL,
   `order_type` varchar(4) NOT NULL,
   `ticker` varchar(120) NOT NULL,
   `price` float NOT NULL,
   `quantity` int NOT NULL,
   `time_placed` datetime NOT NULL,
-  PRIMARY KEY (`portfolio_id`)
+  PRIMARY KEY (`time_placed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------

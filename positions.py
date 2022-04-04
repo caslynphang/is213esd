@@ -62,6 +62,7 @@ class Positions(db.Model):
     portfolio_id = db.Column(GUID(), nullable = False, primary_key = True)
     ticker = db.Column(db.String(120), nullable = False, primary_key = True)
     total_bought_at = db.Column(db.Float(), nullable = False)
+    total_sold_at = db.Column(db.Float(), nullable = False)
     total_quantity = db.Column(db.Integer, nullable = False)
     last_bought_price = db.Column(db.Float(), nullable = False)
     last_sold_price = db.Column(db.Float()) #can be nullable since first transaction is buy and has no last sold price
@@ -71,10 +72,11 @@ class Positions(db.Model):
     last_updated = db.Column(db.DateTime(), nullable = False)
  
  
-    def __init__(self, portfolio_id, ticker, total_bought_at, total_quantity, last_bought_price, last_sold_price, last_updated_price, last_transaction_status, last_transaction_quantity,  last_updated): #constructor. initializes record
+    def __init__(self, portfolio_id, ticker, total_bought_at, total_sold_at, total_quantity, last_bought_price, last_sold_price, last_updated_price, last_transaction_status, last_transaction_quantity,  last_updated): #constructor. initializes record
         self.portfolio_id = portfolio_id
         self.ticker = ticker
         self.total_bought_at = total_bought_at
+        self.total_sold_at = total_sold_at
         self.total_quantity = total_quantity
         self.last_bought_price = last_bought_price
         self.last_sold_price = last_sold_price
@@ -84,7 +86,7 @@ class Positions(db.Model):
         self.last_updated = last_updated
  
     def json(self): #returns json representation of the table in dict form
-        return {"portfolio_id": self.portfolio_id, "ticker":self.ticker, "total_bought_at": self.total_bought_at, "quantity": self.total_quantity, "last_bought_price": self.last_bought_price, "last_sold_price": self.last_sold_price, "last_updated": self.last_updated} 
+        return {"portfolio_id": self.portfolio_id, "ticker":self.ticker, "total_bought_at": self.total_bought_at, "total_sold_at": self.total_sold_at, "quantity": self.total_quantity, "last_bought_price": self.last_bought_price, "last_sold_price": self.last_sold_price, "last_updated": self.last_updated} 
 
 @app.route("/get_all_positions") #get all positions
 def get_all():

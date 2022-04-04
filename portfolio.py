@@ -118,7 +118,7 @@ def update_portfolio(portfolio_id):
     try:
         if (Portfolios.query.filter_by(portfolio_id = portfolio_id).first()): #book found
                 data = request.get_json() #gets json data from the body of the request
-                to_update = Portfolios.query.filter_by(portfolio_id = portfolio_id).first().get()
+                to_update = Portfolios.query.filter_by(portfolio_id = portfolio_id).first()
                 to_update.last_updated = datetime.now()
 
                 #the other fields of portfolio should not have any changes since they are mostly keys, and time_created of a portfolio should never change
