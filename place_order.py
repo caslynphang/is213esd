@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from invokes import invoke_http
+import amqp_setup
 from GUID import GUID
 import requests
 import json
@@ -85,7 +86,9 @@ def buy():
                             "message": "An error occurred recording the order."
                         }
                     ), 500
-
+                message = json.dumps(add_position_validation)
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
+                body=message)
                 #Final Return
                 return jsonify(
                     {
@@ -147,6 +150,10 @@ def buy():
             url = "http://127.0.0.1:5003/update_portfolio/" + front_end_json["portfolio_id"]
 
             portfolio_update_validation = invoke_http(url, method='PUT')
+            
+            message = json.dumps(position_update_validation)
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
+            body=message)
 
             #Final Return Statement
             return jsonify(
