@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from invokes import invoke_http
+from GUID import GUID
 import requests
 import json
 import datetime
@@ -18,7 +19,7 @@ db = SQLAlchemy(app) #initialization of connection, stored in variable db
 class Orders(db.Model):
     __tablename__ = "orders"
 
-    portfolio_id = db.Column(db.Integer, nullable = False)
+    portfolio_id = db.Column(GUID(), nullable = False)
     order_type = db.Column(db.String(4), nullable = False)
     ticker = db.Column(db.String(45), nullable = False)
     price = db.Column(db.Float(), nullable = False)
