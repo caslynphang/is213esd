@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 24, 2022 at 12:34 PM
+-- Generation Time: Apr 04, 2022 at 05:32 AM
 -- Server version: 5.7.31
 -- PHP Version: 7.3.21
 
@@ -21,42 +21,21 @@ SET time_zone = "+00:00";
 -- Database: `esdproject`
 --
 
-DROP DATABASE IF EXISTS esdproject;
-CREATE DATABASE esdproject;
-USE esdproject;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `orders`
+-- Table structure for table `portfolios`
 --
 
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE IF NOT EXISTS `orders` (
-  `portfolio_id` int(11) NOT NULL,
-  `order_type` varchar(4) NOT NULL,
-  `ticker` varchar(45) NOT NULL,
-  `price` float NOT NULL,
-  `quantity` int NOT NULL,
-  `time_placed` datetime NOT NULL,
-  PRIMARY KEY (`portfolio_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `portfolio`
---
-
-DROP TABLE IF EXISTS `portfolio`;
-CREATE TABLE IF NOT EXISTS `portfolio` (
-  `portfolio_id` int(11) NOT NULL,
-  `first_name` varchar(45) NOT NULL,
-  `last_name` varchar(45) NOT NULL,
-  `dob` varchar(45) NOT NULL,
+DROP TABLE IF EXISTS `portfolios`;
+CREATE TABLE IF NOT EXISTS `portfolios` (
+  `portfolio_id` char(32) NOT NULL,
+  `user_id` char(32) NOT NULL,
   `time_created` datetime NOT NULL,
-  `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`portfolio_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `last_updated` datetime NOT NULL,
+  PRIMARY KEY (`portfolio_id`),
+  KEY `fk_user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -66,24 +45,53 @@ CREATE TABLE IF NOT EXISTS `portfolio` (
 
 DROP TABLE IF EXISTS `positions`;
 CREATE TABLE IF NOT EXISTS `positions` (
-  `portfolio_id` int(11) NOT NULL,
-  `ticker` varchar(45) NOT NULL,
+  `portfolio_id` char(32) NOT NULL,
+  `ticker` varchar(120) NOT NULL,
   `total_bought_at` float NOT NULL,
-  `total_sold_at` float NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  KEY `positions_portfolio_id_fk` (`portfolio_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `total_quantity` int(11) NOT NULL,
+  `last_bought_price` float NOT NULL,
+  `last_sold_price` float NOT NULL,
+  `last_updated_price` float NOT NULL,
+  `last_transaction_status` varchar(4) NOT NULL,
+  `last_transaction_quantity` int(11) NOT NULL,
+  `last_updated` datetime NOT NULL,
+  PRIMARY KEY (`portfolio_id`,`ticker`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `user_id` char(32) NOT NULL,
+  `first_name` varchar(120) NOT NULL,
+  `last_name` varchar(120) NOT NULL,
+  `email` varchar(120) NOT NULL,
+  `password_hash` varchar(120) NOT NULL,
+  `time_created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `portfolios`
+--
+ALTER TABLE `portfolios`
+  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
 -- Constraints for table `positions`
 --
 ALTER TABLE `positions`
-  ADD CONSTRAINT `positions_portfolio_id_fk` FOREIGN KEY (`portfolio_id`) REFERENCES `portfolio` (`portfolio_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_portfolio_id` FOREIGN KEY (`portfolio_id`) REFERENCES `portfolios` (`portfolio_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
