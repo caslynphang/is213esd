@@ -100,6 +100,28 @@ CREATE TABLE IF NOT EXISTS positions.positions (
 
 -- --------------------------------------------------------
 
+DROP DATABASE IF EXISTS orders;
+CREATE DATABASE orders;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS orders.orders;
+CREATE TABLE IF NOT EXISTS orders.orders (
+  `portfolio_id` char(32) NOT NULL,
+  `order_type` varchar(4) NOT NULL,
+  `ticker` varchar(120) NOT NULL,
+  `price` float NOT NULL,
+  `quantity` int NOT NULL,
+  `time_placed` datetime NOT NULL,
+  PRIMARY KEY (`portfolio_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
