@@ -43,7 +43,7 @@ channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key=routing_
 
 ############   Activity_Log queue    #############
 #delcare Activity_Log queue
-queue_name = 'Activity_Log' #?##
+queue_name = 'Stock_Log' #?##
 channel.queue_declare(queue=queue_name, durable=True)
     # 'durable' makes the queue survive broker restarts
 

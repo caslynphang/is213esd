@@ -34,20 +34,20 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
       
   #################################################
-  # Logging: The Logging microservice (DONE)
+  # Stock_Logging: The Stock_Logging microservice (DONE)
   #################################################
-  # logging:
-  #   build:
-  #     context: ./
-  #     dockerfile: logging.Dockerfile
-  #   image: jordanteoh2020/logging:esd
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     PYTHONUNBUFFERED: 1
+  stock_logging:
+    build:
+      context: ./
+      dockerfile: stock_logging.Dockerfile
+    image: jordanteoh2020/stock_logging:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
 
   ###################################
   # Error: The Error microservice
