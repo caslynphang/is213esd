@@ -85,10 +85,22 @@ def buy():
                         }
                     ), 500
 
-                return "Buy order Succesfully Filled!"
+                #Final Return
+                return jsonify(
+                    {
+                        "code": 201,
+                        "message": "Buy order Succesfully Filled!"
+                    }
+                ), 201
 
             else:
-                return "An error occured! Please try again and contact the system administrator if it persists. Thank you:)"
+                #Final Return
+                return jsonify(
+                    {
+                        "code": 500,
+                        "message": "An error occured! Please try again and contact the system administrator if it persists. Thank you:)"
+                    }
+                ), 500
             
         else:
             #portfolio already has some positions of requested ticker: update number of positions already in portfolio
@@ -135,12 +147,21 @@ def buy():
 
             portfolio_update_validation = invoke_http(url, method='PUT')
 
-            return "Buy order Succesfully Filled!"
+            #Final Return Statement
+            return jsonify(
+                {
+                    "code": 201,
+                    "message": "Buy order Succesfully Filled!"
+                }
+            ), 201
 
     else:
-        return "Invalid Portfolio ID!"
-
-
+        return jsonify(
+            {
+                "code": 511,
+                "message": "Invalid Portfolio ID!"
+            }
+        ), 511
 
 
 @app.route("/place_order/sell", methods=['POST'])
@@ -165,7 +186,13 @@ def sell():
         if(position_validation["code"] == 404):
             #No initial positions: no positions to sell
 
-            return "No positions to sell!"
+            #Final Return Statement
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "No positions to sell!"
+                }
+            ), 400
             
         else:
             #portfolio already has some positions of requested ticker to sell: check if current positions > quantity intended to sell
@@ -175,7 +202,13 @@ def sell():
 
             if(position_json["quantity"] < front_end_json["quantity"]):
                 
-                return "Not enough positions to sell!"
+                #Final Return Statement
+                return jsonify(
+                    {
+                        "code": 400,
+                        "message": "Not enough positions to sell!"
+                    }
+                ), 400
             
             else:
                 new_total_sold_at = position_json["total_sold_at"] + (front_end_json["price"] * front_end_json["quantity"])
@@ -216,10 +249,21 @@ def sell():
 
                 portfolio_update_validation = invoke_http(url, method='PUT')
 
-                return "Sell order Succesfully Filled!"
+                #Final Return Statement
+                return jsonify(
+                    {
+                        "code": 201,
+                        "message": "Sell order Succesfully Filled!"
+                    }
+                ), 201
 
     else:
-        return "Invalid Portfolio ID!"
+        return jsonify(
+            {
+                "code": 511,
+                "message": "Invalid Portfolio ID!"
+            }
+        ), 511
 
 
 if __name__ == '__main__':
