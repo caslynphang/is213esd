@@ -31,7 +31,15 @@ def buy(stockName):
             user_ticker_close_price = result['c']
             final_result = {"Ticker" : str(result['T']), "Close Price" : str(user_ticker_close_price)}
             final_result1 = json.dumps(final_result)
-            return final_result1
+            return {
+                "code":200,
+                "data":final_result1
+            }
+    else:
+        return {
+            "code":404,
+            "message": "Ticker not found"
+        }
 
 
 
@@ -45,3 +53,4 @@ def get_all_stock_info():
 
 if __name__ == '__main__':
     app.run(port=5005, debug=True)
+
