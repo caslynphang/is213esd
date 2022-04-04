@@ -3,6 +3,7 @@ from datetime import date, timedelta, datetime
 import requests
 import json
 from flask_cors import CORS
+from invokes import invoke_http
 
 app = Flask(__name__)
 CORS(app)
@@ -15,7 +16,7 @@ rangelist = []
 def recommend_by_closeprice(portfolio):
     # talk to portfolio.py
     url1 = "http://127.0.0.1:5000/get_portfolio/<string:portfolio_id>"
-    portfolio = invoke_http(url1, method='GET', json=None, **kwargs)
+    portfolio = invoke_http(url1, method='GET', json=None)
 
     # retrieve last updated position for portfolio
     for objs in portfolio:
@@ -29,8 +30,8 @@ def recommend_by_closeprice(portfolio):
     stockName = max(date_ticker, key=date_ticker.get)
 
     # talk to stockinfo.py
-    url2 = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/"
-    results = invoke_http(url2, method='GET', json=None, **kwargs)
+    url2 = "http://127.0.0.1:5005/stock_info/get_all_stock_info"
+    results = invoke_http(url2, method='GET', json=None)
     
     # find close price of stock chosen by user
     for result in results:
@@ -56,8 +57,8 @@ def recommend_by_closeprice(portfolio):
 def recommend_by_tradevolume():
     final_result = {}
     # talk to stockinfo.py
-    url = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/"
-    results = invoke_http(url, method='GET', json=None, **kwargs)
+    url = "http://127.0.0.1:5005/stock_info/get_all_stock_info"
+    results = invoke_http(url, method='GET', json=None)
     trade_volume_list = []
 
     # get top 20 stocks trade volume in order
@@ -78,4 +79,4 @@ def recommend_by_tradevolume():
     )
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5006, debug=True)
