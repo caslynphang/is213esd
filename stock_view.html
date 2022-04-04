@@ -155,7 +155,7 @@
               </tr>
 
               <!-- populate stock data -->
-              <tr class="selected_stock" v-for="(ticker, index) of tickers">
+              <tr class="selected_stock" v-for="(ticker, index) of tickers" @click="select_stock(ticker.T)">
                 <td>
                   <div class="d-flex">
                     <p
@@ -164,7 +164,7 @@
                       {{ticker.T.charAt(0)}}
                     </p>
                     <div class="ps-4">
-                      <p class="ticker" @click="select_stock(ticker.T)">{{ticker.T}}</p>
+                      <p class="ticker" >{{ticker.T}}</p>
                       <!-- <p class="text-muted w-25">{{stock_name.at(index)}}</p> -->
                       <p class="text-muted"></p>
                     </div>
@@ -215,31 +215,31 @@
           this.tickers = result;
           // console.log(result)
 
-          for (ticker of result) {
-            // console.log(ticker)
-            var ticker_abbr = ticker.T;
-            // console.log(ticker_abbr)
-            // add more details to the ticker, e.g. logo, fullname
+          // for (ticker of result) {
+          //   // console.log(ticker)
+          //   var ticker_abbr = ticker.T;
+          //   // console.log(ticker_abbr)
+          //   // add more details to the ticker, e.g. logo, fullname
 
-            var url_indiv_info =
-              "http://127.0.0.1:5005/stock_info/get_indiv_info/" + ticker_abbr;
-            axios
-              .get(url_indiv_info)
-              .then((response) => {
-                // handle success
-                result_indiv_info = response.data;
-                // console.log(result_indiv_info)
+          //   var url_indiv_info =
+          //     "http://127.0.0.1:5005/stock_info/get_indiv_info/" + ticker_abbr;
+          //   axios
+          //     .get(url_indiv_info)
+          //     .then((response) => {
+          //       // handle success
+          //       result_indiv_info = response.data;
+          //       // console.log(result_indiv_info)
 
-                this.stock_name.push(result_indiv_info.name);
-              })
-              .catch(function (error) {
-                // handle error
-                console.log(error);
-              });
-          }
+          //       this.stock_name.push(result_indiv_info.name);
+          //     })
+          //     .catch(function (error) {
+          //       // handle error
+          //       console.log(error);
+          //     });
+          // }
 
           // this.tickers = tickers_arr;
-          console.log(this.stock_name);
+          // console.log(this.stock_name);
         })
         .catch((error) => {
           // process error object
