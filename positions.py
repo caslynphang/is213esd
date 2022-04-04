@@ -169,7 +169,7 @@ def add_position(portfolio_id): #add position
         ), 400
 
 
-        added_position = Positions(portfolio_id = portfolio_id, ticker = ticker, total_bought_at = quantity * buy_price, total_quantity = quantity, last_bought_price = buy_price, last_sold_price = 0.0, last_updated_price = buy_price, last_transaction_status = "buy", last_transaction_quantity = quantity, last_updated = datetime.now()) #create position record to be added to db
+        added_position = Positions(portfolio_id = portfolio_id, ticker = ticker, total_bought_at = quantity * buy_price, total_sold_at = 0.0, total_quantity = quantity, last_bought_price = buy_price, last_sold_price = 0.0, last_updated_price = buy_price, last_transaction_status = "buy", last_transaction_quantity = quantity, last_updated = datetime.now()) #create position record to be added to db
         db.session.add(added_position)
         #added_position.portfolio.last_updated = datetime.now()
         db.session.commit()
@@ -219,8 +219,11 @@ def update_position(portfolio_id):
                     to_update.last_updated_price = data['last_updated_price']
                 if data['total_bought_at']:
                     to_update.total_bought_at = data['total_bought_at']
+                if data['total_sold_at']:
+                    to_update.total_sold_at = data['total_sold_at']
                 if data['total_quantity']:
                     to_update.total_quantity = data['total_quantity'] 
+
 
                 to_update.last_updated = datetime.now()
 

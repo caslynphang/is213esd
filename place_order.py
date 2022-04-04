@@ -187,7 +187,7 @@ def sell():
             
             else:
                 new_total_sold_at = position_json["total_sold_at"] + (front_end_json["price"] * front_end_json["quantity"])
-                new_total_quantity = position_json["total_quantity"] - front_end_json["quantity"]
+                new_total_quantity = position_json["quantity"] - front_end_json["quantity"]
                 new_last_sold_price = front_end_json["price"]
                 new_last_updated_price = front_end_json["price"]
                 new_last_transaction_status = "sell"
@@ -195,19 +195,19 @@ def sell():
 
                 update_position_json = {"portfolio_id": position_json["portfolio_id"], "ticker": position_json["ticker"], "total_sold_at": new_total_sold_at, "total_quantity": new_total_quantity, "last_bought_price": position_json["last_bought_price"], "last_sold_price": new_last_sold_price, "last_updated_price": new_last_updated_price, "last_transaction_status": new_last_transaction_status, "last_transaction_quantity": new_last_transaction_quantity, "last_updated": position_json["last_updated"]}
 
-                return update_position_json
-
                 #call update positions function to update position record in positions table
 
-                url = "http://127.0.0.1:5000/update_position/" + front_end_json["portfolio_id"]
+                url = "http://127.0.0.1:5004/update_position/" + front_end_json["portfolio_id"]
 
-                position_update_validation = invoke_http(url, method='PUT', json = update_position_json, **kwargs)
+                position_update_validation = invoke_http(url, method='PUT', json = update_position_json)
+
+                return position_update_validation
 
                 #update portfolio timing
 
-                url = "http://127.0.0.1:5000/update_portfolio/" + front_end_json["portfolio_id"]
+                url = "http://127.0.0.1:5003/update_portfolio/" + front_end_json["portfolio_id"]
 
-                portfolio_update_validation = invoke_http(url, method='PUT', **kwargs)
+                portfolio_update_validation = invoke_http(url, method='PUT')
 
                 return position_update_validation
 

@@ -121,7 +121,6 @@ CREATE TABLE IF NOT EXISTS orders.orders (
   `order_type` varchar(4) NOT NULL,
   `ticker` varchar(120) NOT NULL,
   `price` float NOT NULL,
-  `quantity` int NOT NULL,
   `time_placed` datetime NOT NULL,
   PRIMARY KEY (`time_placed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
