@@ -73,7 +73,6 @@ class Portfolios(db.Model):
         return {"portfolio_id": self.portfolio_id, "user_id": self.user_id, "time_created": self.time_created, "last_updated":self.last_updated} 
 
 
-
 @app.route("/get_all_portfolios") #get all portfolios
 def get_all():
     portfolios = Portfolios.query.all() #SQLAlchemy magic

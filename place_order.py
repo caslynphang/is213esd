@@ -44,13 +44,13 @@ def buy():
     
     #2. extracting data from json request
     front_end_json = request.get_json()
-    front_end_json = front_end_json['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
+    # front_end_json = front_end_json['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
     return front_end_json
 
     #3 check if portfolio is valid
-    url = "http://127.0.0.1:5000/get_portfolio/" + front_end_json["portfolio_id"]
+    url = "http://127.0.0.1:5000/get_portfolio/" + str(front_end_json["portfolio_id"])
 
-    portfolio_validation = invoke_http(url, method='GET', **kwargs)
+    portfolio_validation = invoke_http(url, method='GET')
 
     if(portfolio_validation["code"] != 404): #portfolio valid!
 
@@ -62,7 +62,7 @@ def buy():
         if(position_validation["code"] == 404):
             #No initial positions: add quantity of new positions to positions table
 
-            url = "http://127.0.0.1:5000/add_position/" + front_end_json["portfolio_id"]
+            url = "http://127.0.0.1:5000/add_position/" + str(front_end_json["portfolio_id"])
             
             add_position_validation = invoke_http(url, method='POST', json=front_end_json, **kwargs)
 
@@ -89,13 +89,13 @@ def buy():
 
             #call update positions function to update position record in positions table
 
-            url = "http://127.0.0.1:5000/update_position/" + front_end_json["portfolio_id"]
+            url = "http://127.0.0.1:5000/update_position/" + str(front_end_json["portfolio_id"])
 
             position_update_validation = invoke_http(url, method='PUT', json = update_position_json, **kwargs)
 
             #update portfolio timing
 
-            url = "http://127.0.0.1:5000/update_portfolio/" + front_end_json["portfolio_id"]
+            url = "http://127.0.0.1:5000/update_portfolio/" + str(front_end_json["portfolio_id"])
 
             portfolio_update_validation = invoke_http(url, method='PUT', **kwargs)
 
