@@ -145,14 +145,14 @@
           <div class="container outer p-5">
             <div class="text-white fw-bold bg-black">
               <div class="d-flex">
-                <p
+                <p id="ticker_first_letter"
                   class="stock-picture mb-0 d-flex justify-content-center align-items-center"
                 >
                   A
                 </p>
                 <div class="ps-4">
-                  <p>ADA</p>
-                  <p class="text-muted">Cardano</p>
+                  <p id="ticker_name">ADA</p>
+                  <!-- <p class="text-muted">Cardano</p> -->
                 </div>
               </div>
             </div>
@@ -253,7 +253,11 @@
                             ></button>
                           </div>
                           <div class="modal-body">
-                            <input type="text" class="filter-bar" id="buy_amount"/>
+                            <input
+                              type="text"
+                              class="filter-bar"
+                              id="buy_amount"
+                            />
                           </div>
                           <div class="modal-footer">
                             <button
@@ -306,7 +310,11 @@
                             ></button>
                           </div>
                           <div class="modal-body">
-                            <input type="text" class="filter-bar" id="sell_amount" />
+                            <input
+                              type="text"
+                              class="filter-bar"
+                              id="sell_amount"
+                            />
                           </div>
                           <div class="modal-footer">
                             <button
@@ -353,8 +361,8 @@
       .then((response) => {
         // process response.dataobject
         // console.log(typeof(response.data))
-        
         console.log(response.data);
+
         var result = response.data[0];
 
         var close = result.c;
@@ -367,6 +375,9 @@
         var volume = result.v;
 
         // console.log(average)
+        $("#ticker_name").text(ticker);
+        $("#ticker_first_letter").text(ticker.charAt(0));
+        
         $("#average").text(average);
         $("#close").text(close);
         $("#open").text(open);
@@ -388,8 +399,67 @@
     console.log("dasa");
     // console.log(ticker_name);
 
-    // var quantity = 
+    var quantity = $("#buy_amount").val();
+    var email = document.cookie
+      .split("; ")
+      .filter(function (c) {
+        return /email=/.test(c);
+      })[0]
+      .replace(/email=/g, "");
 
+    const getuser_url = "http://127.0.0.1:5002/get_user/" + email;
+
+    // console.log(quantity,email);
+    axios
+      .get(getuser_url)
+      .then((response) => {
+        // process response.dataobject
+        // console.log(typeof(response.data))
+        var result = response.data;
+        console.log(result);
+        var user_id = result.data.user_id;
+        console.log(result.data.user_id);
+
+        const getportfolio_url = "http://127.0.0.1:5003/get_portfolio/user_find/" + user_id;
+
+        axios
+          .get(getportfolio_url)
+          .then((response) => {
+            // process response.dataobject
+            var portfolio = response.data;
+            console.log(portfolio);
+
+            // if no error, redirect to homepage
+            
+          })
+          .catch((error) => {
+            // process error object
+            // error_code = error.response.status;
+          });
+
+        // if no error, redirect to homepage
+        // if (result == "201") {
+        //   // ssuccess
+        // }
+      })
+      .catch((error) => {
+        // process error object
+        // error_code = error.response.status;
+
+        // if error
+        // if (error_code == "500") {
+        //   console.log('error500')
+        // }
+
+        // // if user account already created error
+        // if (error_code == "400") {
+        //   console.log('error400')
+        //   $(".scrolling").append(
+        //     "<p class='error-text'>Account already exists!</p>"
+        //   );
+        //   $(".scrolling").scrollTop($(".scrolling")[0].scrollHeight);
+        // }
+      });
 
     const url = "http://127.0.0.1:5001/buy";
     axios

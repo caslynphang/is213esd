@@ -284,7 +284,8 @@ def signup():
             return jsonify(
                 {
                     "code": 201,
-                    "data":"Success"
+                    "data":"Success",
+                    "user": signup_results
                 }
             ), 201
     

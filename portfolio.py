@@ -75,6 +75,24 @@ def find_by_portfolio_id(portfolio_id):
         }
     ), 404
 
+@app.route("/get_portfolio/user_find/<string:user_id>")
+def find_by_user_id(user_id):
+    portfolio = Portfolios.query.filter_by(user_id=user_id).first() #returns a list of 1 item, .first() gets the first item. similar to limit 1 in sql
+    if portfolio:
+        return jsonify(
+            {
+                "code": 200,
+                "data": portfolio.json()
+            }
+        )
+
+    return jsonify(
+        {
+            "code": 404,
+            "message": f"Portfolio {user_id} not found"
+        }
+    ), 404
+
 @app.route("/<string:user_id>/add_portfolio", methods=['POST'])
 def create_portfolio(user_id): #create portfolio
 
