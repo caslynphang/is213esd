@@ -109,7 +109,7 @@ def get_all():
 @app.route("/get_positions/<string:portfolio_id>")
 def get_all_positions_by_portfolio_id(portfolio_id):
     positions = Positions.query.filter_by(portfolio_id=portfolio_id)#returns a list of positions
-    if len(positions):
+    if(positions):
         return jsonify(
             {
                 "code": 200,
