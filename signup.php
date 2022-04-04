@@ -97,6 +97,11 @@
 
         // if no error, redirect to homepage
         if (result == "201") {
+          <?php
+             require_once 'common.php';
+          $_SESSION['email'] = $email;
+            $_SESSION['portfolio'] = $university;
+            ?>
           $(".scrolling").append(
             "<p class='succeed-text'>Account successfully created. Redirecting you to the Homepage... </p>"
           );

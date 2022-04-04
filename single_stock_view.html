@@ -388,13 +388,16 @@
     console.log("dasa");
     // console.log(ticker_name);
 
+    // var quantity = 
+
+
     const url = "http://127.0.0.1:5001/buy";
     axios
       .post(url, {
         params: {
           ticker: ticker,
           price: close,
-          "quantity:": 5,
+          quantity: 5,
           order_type: "buy",
           portfolio_id: 1,
         },
