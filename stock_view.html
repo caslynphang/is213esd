@@ -155,7 +155,7 @@
               </tr>
 
               <!-- populate stock data -->
-              <tr id="selected_stock" v-for="ticker of tickers">
+              <tr id="selected_stock" v-for="(ticker, index) of tickers">
                 <td>
                   <div class="d-flex">
                     <p
@@ -165,7 +165,8 @@
                     </p>
                     <div class="ps-4">
                       <p class="ticker">{{ticker.T}}</p>
-                      <p class="text-muted">{{ticker.name}}</p>
+                      <!-- <p class="text-muted w-25">{{stock_name.at(index)}}</p> -->
+                      <p class="text-muted">  </p>
                     </div>
                   </div>
                 </td>
@@ -192,6 +193,7 @@
     data() {
       return {
         tickers: [],
+        stock_name: [],
       };
     },
     mounted: function () {
@@ -201,29 +203,26 @@
         .get(url)
         .then((response) => {
           // process response.dataobject
-          var result = response.data.slice(0, 2);
-          var tickers_arr = [];
+          var result = response.data.slice(0, 10);
+          this.tickers = result;
           // console.log(result)
 
-          for (var ticker of result) {
+          for (ticker of result) {
             // console.log(ticker)
             var ticker_abbr = ticker.T;
+            // console.log(ticker_abbr)
             // add more details to the ticker, e.g. logo, fullname
 
-            const url_indiv_info =
+            var url_indiv_info =
               "http://127.0.0.1:5005/stock_info/get_indiv_info/" + ticker_abbr;
             axios
               .get(url_indiv_info)
-              .then(function (response) {
+              .then((response) => {
                 // handle success
                 result_indiv_info = response.data;
+                // console.log(result_indiv_info)
 
-                ticker.name = result_indiv_info.name;
-                // console.log(ticker);
-
-                tickers_arr.push(ticker);
-
-
+                this.stock_name.push(result_indiv_info.name);
               })
               .catch(function (error) {
                 // handle error
@@ -232,8 +231,8 @@
 
           }
 
-          this.tickers = tickers_arr;
-          console.log(this.tickers);
+          // this.tickers = tickers_arr;
+          console.log(this.stock_name);
         })
         .catch((error) => {
           // process error object
