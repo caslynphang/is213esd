@@ -137,124 +137,31 @@
         <div class="col">
           <div class="container outer p-5">
             <div class="text-white bg-black">
-              <h1 class="fw-bold">Similar Stocks</h1>
+              <h1 class="fw-bold">Recommendations</h1>
 
-              <p>Select stock</p>
+              <p class="mt-5">Last Transacted</p>
 
-              <button
-                type="button"
-                class="selector"
-                id="dropdownMenuButton1"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <div class="d-flex">
-                  <div class="bg-white text-dark p-2 selected">
-                    <div class="d-flex justify-content-between">
-                      <div class="d-flex">
-                        <p
-                          class="stock-picture mb-0 d-flex justify-content-center align-items-center"
-                        >
-                          A
-                        </p>
-                        <div class="ps-4">
-                          <p>ADA</p>
-                          <p class="text-muted">Cardano</p>
-                        </div>
-                      </div>
 
-                      <div class="d-flex fw-bold">
-                        <div class="ps-4">
-                          <p class="text-muted">Buying</p>
-                          <p>123</p>
-                        </div>
-                        <div class="ps-4">
-                          <p class="text-muted">Selling</p>
-                          <p>123</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="dropdown-btn px-4 d-flex justify-content-center align-items-center"
-                  >
-                    <img src="images/dropdown.png" alt="" />
-                  </div>
-                </div>
-              </button>
-              <!-- all the dropdown items in ul -->
-              <ul class="dropdown-menu" style="width: 58%;" aria-labelledby="dropdownMenuButton1">
-                <!-- first dropdown option -->
-                <li><a class="dropdown-item" href="#">
-                  <div class="d-flex">
-                  <div class="bg-white text-dark selected">
-                    <div class="d-flex justify-content-between">
-                      <div class="d-flex">
-                        <p
-                          class="stock-picture mb-0 d-flex justify-content-center align-items-center"
-                        >
-                          A
-                        </p>
-                        <div class="ps-4">
-                          <p>ADA</p>
-                          <p class="text-muted">Cardano</p>
-                        </div>
-                      </div>
 
-                      <div class="d-flex fw-bold">
-                        <div class="ps-4">
-                          <p class="text-muted">Buying</p>
-                          <p>123</p>
-                        </div>
-                        <div class="ps-4">
-                          <p class="text-muted">Selling</p>
-                          <p>123</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
-                </div></a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </li>
-              </ul>
-            </div>
 
-            <p class="pt-3">Filter</p>
-            <div class="d-flex pb-5">
-              <input type="text" placeholder="Minimum" class="filter-bar" />
-              <input type="text" placeholder="Maximum" class="filter-bar" />
-            </div>
-
-            <table class="table table-borderless mt-5">
-              <tr>
-                <th>Markets</th>
-                <th>Sell</th>
-                <th>Buy</th>
-                <th>Volume</th>
-              </tr>
-
-              <!-- populate stock data -->
+            <table class="table table-borderless" >
               <tr>
                 <td>
-                  <div class="d-flex">
-                    <p
-                      class="stock-picture mb-0 d-flex justify-content-center align-items-center"
-                    >
-                      A
-                    </p>
-                    <div class="ps-4">
-                      <p>ADA</p>
-                      <p class="text-muted">Cardano</p>
-                    </div>
+                <div class="card mt-2">
+                  <div class="card-body">
+                    <h5 class="card-title">AAPL</h5>
+                    <p class="card-text">Close Price: 127.25</p>
+                    <a href="#" class="btn btn-primary mt-3">Buy</a>
                   </div>
-                </td>
-                <td><div class="sell fw-bold">0.7945</div></td>
-                <td><div class="buy fw-bold">0.8113</div></td>
-                <td class="vol-align">26,122,646</td>
-              </tr>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <div id="container">
+                
+              </div>
+            </tr>
             </table>
           </div>
         </div>
@@ -262,3 +169,31 @@
     </div>
   </body>
 </html>
+
+
+<script>
+container= document.getElementById("container")
+axios.get("http://127.0.0.1:5005/stock_recommender/recommend_by_closeprice/<string:portfolio_id>")
+.then(response =>{
+  data = response.data
+  console.log(data)
+  data.foreach((result,idx) => {
+  const card = document.createElement('div');
+  card.classList = 'card-body';
+  const content = `
+              <tr>
+                <td>
+                <div class="card mt-5" style="width: 28rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">${result.ticker}</h5>
+                    <p class="card-text">Close Price:${result.price}</p>
+                    <a href="#" class="btn btn-primary">Buy</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+  `;
+  container.innerHTML += content;
+})
+})
+</script>
