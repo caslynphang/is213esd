@@ -89,7 +89,7 @@
   var password = $("#password").val();
 
   const url = '/get_user/<string:email>';
-  axios.get('/user?ID=12345')
+  axios.get(url)
   .then(function (response) {
     // handle success
     console.log(response);
