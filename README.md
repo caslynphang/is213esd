@@ -16,10 +16,10 @@
 
 | # | Name | SMU Email Address | Roles and Responsibilities |
 | ----------- | ----------- | ----------- | ----------- |
-| 1 | Caslyn Phang | @scis.smu.edu.sg | <ul><li></li></ul>|
-| 2 | Teh Xue Er | @scis.smu.edu.sg | <ul><li></li></ul>|
-| 3 | Jethro Ong | @scis.smu.edu.sg | <ul><li></li></ul>|
-| 4 | Goh Soon Hao | @scis.smu.edu.sg |<ul><li></li></ul>|
+| 1 | Caslyn Phang | caslynphang.2020@scis.smu.edu.sg | <ul><li></li></ul>|
+| 2 | Teh Xue Er | xueer.teh.2020@scis.smu.edu.sg | <ul><li></li></ul>|
+| 3 | Jethro Ong Yong En | jethro.ong.2020@scis.smu.edu.sg | <ul><li></li></ul>|
+| 4 | Goh Soon Hao | soonhao.goh.2020@scis.smu.edu.sg |<ul><li></li></ul>|
 | 5 | Teoh Chin Hao Jordan | jordan.teoh.2020@scis.smu.edu.sg | <ul><li></li></ul>|
 
 ## :moneybag: Project Overview :moneybag:
