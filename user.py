@@ -254,4 +254,4 @@ def delete_user(email):
 
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5002, debug=True)
