@@ -11,8 +11,10 @@ if weekno == 5:
     mostrecentday = str(date.today() - timedelta(days=1))
 elif weekno == 6:
     mostrecentday = str(date.today() - timedelta(days=2))
+elif weekno == 0:
+    mostrecentday = str(date.today()- timedelta(days=3))
 else:
-    mostrecentday = str(datetime.date.today())
+    mostrecentday = str(date.today())
 
 app = Flask(__name__)
 CORS(app)
