@@ -6,19 +6,6 @@ volumes:
 services:
 
   ###################################
-  # signup_login : The signup_login microservice
-  ###################################
-  signup_login:
-    build:
-      context: ./
-      dockerfile: signup_login.Dockerfile
-    image: jordanteoh2020/signup_login:esd
-    restart: always
-    environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
-      PYTHONUNBUFFERED: 1
-
-  ###################################
   # User : The User microservice
   ###################################
   user:
@@ -139,19 +126,3 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
       PYTHONUNBUFFERED: 1
-
-  ###################################
-  # Error: The Error microservice
-  ###################################
-  # error:
-  #   build:
-  #     context: ./
-  #     dockerfile: error.Dockerfile
-  #   image: jordanteoh2020/error:esd
-  #   restart: always
-  #   depends_on:
-  #     - rabbitmq
-  #   environment:
-  #     rabbit_host: rabbitmq
-  #     rabbit_port: 5672
-  #     PYTHONUNBUFFERED: 1
