@@ -160,11 +160,11 @@
   Vue.createApp({
     data() {
       return {
-        ticker: 'Hello Vue!',
-        stock_name: 'Hello Vue!',
-        sell_amount: 'Hello Vue!',
-        buy_amount: 'Hello Vue!',
-        volume: 'Hello Vue!'
+        tickers: [],
+        stock_names: [],
+        sell_amount: [],
+        buy_amount: [],
+        volumes: []
       }
     },
     mounted: function () {
@@ -174,57 +174,25 @@
         .then(response => {
           // process response.dataobject
           // console.log(typeof(response.data))
-          var result = response.data
+          var tickers = Object.keys(response.data.data);
 
-          // for ()
+          console.log(result);
+          this.tickers = tickers;
 
-          // this.ticker = ''
-          // this.stock_name = ''
-          // this.sell_amount = ''
-          // this.buy_amount = ''
-          // this.volume = ''
+          for (ticker of tickers) {
+            const stockinfo_url = 'http://127.0.0.1:5005/stock_info/buy/' + ticker;
 
-          // console.log(ticker,
-          //   stock_name,
-          //   sell_amount,
-          //   buy_amount,
-          //   volume)
+            axios.get(stockinfo_url)
+              .then(function (response) {
+                // handle success
+                console.log(response);
+                
 
-            console.log(response.data);
-            fail;
-
-          // if got error, then set error msg in data variable
-          if (result.full_name != undefined) {
-            for (error of full_name_error) {
-              this.full_name_error += error
-
-            }
-          }
-          if (result.email != undefined) {
-            for (error of email_error) {
-              this.email_error += error
-
-            }
-          }
-          if (result.password != undefined) {
-            for (error of password_error) {
-              this.password_error += error + "<br>"
-
-            }
-          }
-
-          if (result == '') {
-            this.success = true
-
-            this.full_name = ''
-            this.email = ''
-            this.password = ''
-            this.confirm_password = ''
-            window.scrollTo(0, document.body.scrollHeight);
-
-            setTimeout(function () {
-              window.location.href = 'homepage/homepage.php';
-            }, 4000);
+              })
+              .catch(function (error) {
+                // handle error
+                console.log(error);
+              })
           }
 
         })
