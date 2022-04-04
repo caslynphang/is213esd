@@ -68,7 +68,7 @@ class Users(UserMixin, db.Model):
     password_hash = db.Column(db.String())    
     time_created = db.Column(db.DateTime(), nullable=False)
     last_updated = db.Column(db.DateTime(), nullable = False)
-    portfolios = db.relationship('Portfolio', backref = 'user', cascade = 'all, delete')
+
  
     def __init__(self, user_id, first_name, last_name, email, time_created, last_updated): #constructor. initializes record
         self.user_id = user_id
