@@ -1,7 +1,7 @@
 from flask import Flask, redirect, request, render_template
 from flask_cors import CORS
 from flask_login import current_user, login_user, login_required, logout_user
-from user import login 
+from user import login #loginmanager from user model
 import logging
 import os, sys
 import requests
