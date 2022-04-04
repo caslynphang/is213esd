@@ -8,28 +8,30 @@ services:
   #######################################################
   # Portfolio : The Portfolio microservice (Done)
   #######################################################
-  # portfolio:
-  #   build:
-  #     context: ./
-  #     dockerfile: portfolio.Dockerfile
-  #   image: jordanteoh2020/portfolio:esd
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://root@host.docker.internal:3306/esdproject/portfolio
-  #     PYTHONUNBUFFERED: 1
+  portfolio:
+    build:
+      context: ./
+      dockerfile: portfolio.Dockerfile
+    image: jordanteoh2020/portfolio:esd
+    restart: always
+    depends_on: # (Need to edit)
+      - user
+    environment:
+      dbURL: mysql+mysqlconnector://root@host.docker.internal:3306/esdproject/portfolio
+      PYTHONUNBUFFERED: 1
 
   ####################################
   # RabbitMQ: The messaging broker   (DONE)
   ####################################
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   hostname: esd-rabbit
-  #   restart: always
-  #   ports:
-  #     - "5672:5672"
-  #     - "15672:15672"
-  #   volumes: 
-  #     - rabbitmq_data:/var/lib/rabbitmq
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
       
   #################################################
   # Logging: The Logging microservice (DONE)
@@ -100,38 +102,56 @@ services:
   ###################################
   # Positions : The Positions microservice
   ###################################
-  # positions:
-  #   build:
-  #     context: ./
-  #     dockerfile: positions.Dockerfile
-  #   image: jordanteoh2020/positions:esd
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
-  #     PYTHONUNBUFFERED: 1
+  positions:
+    build:
+      context: ./
+      dockerfile: positions.Dockerfile
+    image: jordanteoh2020/positions:esd
+    depends_on: # (Need to edit)
+      - portfolio
+      - user
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
+      PYTHONUNBUFFERED: 1
 
     ###################################
   # Stock Recommender : The Stock Recommender microservice
   ###################################
-  # stock_recommender:
-  #   build:
-  #     context: ./
-  #     dockerfile: stock_recommender.Dockerfile
-  #   image: jordanteoh2020/stock_recommender:esd
-  #   restart: always
-  #   environment:
-  #     URL: http://127.0.0.1:5000/stockinfo/get_all_stock_info/
-  #     PYTHONUNBUFFERED: 1
+  stock_recommender:
+    build:
+      context: ./
+      dockerfile: stock_recommender.Dockerfile
+    image: jordanteoh2020/stock_recommender:esd
+    restart: always
+    environment:
+      URL: http://127.0.0.1:5000/stockinfo/get_all_stock_info/
+      PYTHONUNBUFFERED: 1
 
     ###################################
   # User : The User microservice
   ###################################
-  # user:
-  #   build:
-  #     context: ./
-  #     dockerfile: user.Dockerfile
-  #   image: jordanteoh2020/user:esd
-  #   restart: always
-  #   environment:
-  #     dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
-  #     PYTHONUNBUFFERED: 1
+  user:
+    build:
+      context: ./
+      dockerfile: user.Dockerfile
+    image: jordanteoh2020/user:esd
+    depends_on: # (Need to edit)
+      - signup_login
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
+      PYTHONUNBUFFERED: 1
+
+    ###################################
+  # signup_login : The signup_login microservice
+  ###################################
+  signup_login:
+    build:
+      context: ./
+      dockerfile: signup_login.Dockerfile
+    image: jordanteoh2020/signup_login:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
+      PYTHONUNBUFFERED: 1
