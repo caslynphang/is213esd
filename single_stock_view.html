@@ -127,7 +127,10 @@
                 <p class="m-0">Portfolio</p>
               </a>
 
-              <a href="stock_recommender_view.html" class="col services rounded text-center mx-2 py-3">
+              <a
+                href="stock_recommender_view.html"
+                class="col services rounded text-center mx-2 py-3"
+              >
                 <img src="images/thumbs_up.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
@@ -204,7 +207,6 @@
                   <p class="text-muted">Volume</p>
                   <p id="volume">123</p>
                 </div>
-
               </div>
 
               <div class="floating-banner bg-white soft-shadow p-5">
@@ -214,7 +216,6 @@
                     <p class="fw-bold text-muted">Price</p>
                     <h2 class="fw-bold" id="price">123</h2>
                     <!-- Button trigger modal -->
-                    
                   </div>
 
                   <!-- Selling -->
@@ -252,7 +253,7 @@
                             ></button>
                           </div>
                           <div class="modal-body">
-                            <input type="text" class="filter-bar" />
+                            <input type="text" class="filter-bar" id="buy_amount"/>
                           </div>
                           <div class="modal-footer">
                             <button
@@ -262,7 +263,11 @@
                             >
                               Close
                             </button>
-                            <button type="button" class="btn btn-success">
+                            <button
+                              type="button"
+                              class="btn btn-success"
+                              id="buy-btn"
+                            >
                               Buy
                             </button>
                           </div>
@@ -301,7 +306,7 @@
                             ></button>
                           </div>
                           <div class="modal-body">
-                            <input type="text" class="filter-bar" />
+                            <input type="text" class="filter-bar" id="sell_amount" />
                           </div>
                           <div class="modal-footer">
                             <button
@@ -311,7 +316,11 @@
                             >
                               Close
                             </button>
-                            <button type="button" class="btn btn-success">
+                            <button
+                              type="button"
+                              class="btn btn-success"
+                              id="sell-btn"
+                            >
                               Sell
                             </button>
                           </div>
@@ -332,8 +341,8 @@
 <script>
   // retrieve ticker from url
   let searchParams = new URLSearchParams(window.location.search);
-  if (searchParams.has('ticker')){
-    var ticker = searchParams.get('ticker')
+  if (searchParams.has("ticker")) {
+    var ticker = searchParams.get("ticker");
     // console.log(ticker);
 
     // call stockinfo.py to retrieve individual stock details
@@ -344,18 +353,18 @@
       .then((response) => {
         // process response.dataobject
         // console.log(typeof(response.data))
-        console.log(response.data);
-
-        var result = response.data[0]
-
-        var close = result.c
-        var open = result.o
-        var average = result.vw
         
-        var highest = result.h
-        var lowest = result.l
-        var number = result.n
-        var volume = result.v
+        console.log(response.data);
+        var result = response.data[0];
+
+        var close = result.c;
+        var open = result.o;
+        var average = result.vw;
+
+        var highest = result.h;
+        var lowest = result.l;
+        var number = result.n;
+        var volume = result.v;
 
         // console.log(average)
         $("#average").text(average);
@@ -368,13 +377,38 @@
         $("#volume").text(volume);
 
         $("#price").text(close);
-
       })
       .catch((error) => {
         // process error object
         console.log("error");
       });
-  } 
+  }
 
-  
+  $("#buy-btn").click(function () {
+    console.log("dasa");
+    // console.log(ticker_name);
+
+    // var quantity = 
+
+
+    const url = "http://127.0.0.1:5001/buy";
+    axios
+      .post(url, {
+        params: {
+          ticker: ticker,
+          price: close,
+          quantity: 5,
+          order_type: "buy",
+          portfolio_id: 1,
+        },
+      })
+      .then((response) => {
+        // process response.dataobject
+        var result = response.data;
+      })
+      .catch((error) => {
+        // process error object
+        console.log("error");
+      });
+  });
 </script>
