@@ -11,7 +11,7 @@ logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/esdproject' #dynamically retrieves db url
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/positions' #dynamically retrieves db url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications require extra memory and is not necessary in this case
  
 db = SQLAlchemy(app) #initialization of connection, stored in variable db
@@ -281,6 +281,6 @@ def delete_position(portfolio_id, ticker):
 
 
 if __name__ == "__main__":
-    app.run(port = 5000, debug = True) #adding host = 0.0.0.0 ensures that the service can be accessible in the network debug = true restarts the flask app if the source code is being changed as the flask app is running
+    app.run(port = 5004, debug = True) #adding host = 0.0.0.0 ensures that the service can be accessible in the network debug = true restarts the flask app if the source code is being changed as the flask app is running
 
 #can specify which ip address and port that the flask app should start with, can communicate with other computers in this manner

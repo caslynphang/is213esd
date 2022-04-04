@@ -10,7 +10,7 @@ import datetime
 app = Flask(__name__)
 CORS(app)
 
-""" app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/esdproject' #dynamically retrieves db url
+""" app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/orders' #dynamically retrieves db url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications require extra memory and is not necessary in this case
 
 db = SQLAlchemy(app) #initialization of connection, stored in variable db """
@@ -56,7 +56,11 @@ def buy():
         #4. invoke positions microservice to check if current portfolio already has position 
         url = "http://127.0.0.1:5004/get_positions/" + front_end_json['portfolio_id'] + "/" + front_end_json["ticker"]
 
+        return url
+
         position_validation = invoke_http(url, method='GET')
+
+        return position_validation
 
         if(position_validation["code"] == 404):
             #No initial positions: add quantity of new positions to positions table
@@ -86,6 +90,8 @@ def buy():
 
             update_position_json = {"portfolio_id": position_json["portfolio_id"], "ticker": position_json["ticker"], "total_bought_at": new_total_bought_at, "total_quantity": new_total_quantity, "last_bought_price": new_last_bought_price, "last_sold_price": position_json["last_sold_price"], "last_updated_price": new_last_updated_price, "last_transaction_status": new_last_transaction_status, "last_transaction_quantity": new_last_transaction_quantity, "last_updated": position_json["last_updated"]}
 
+            return update_position_json
+
             #call update positions function to update position record in positions table
 
             url = "http://127.0.0.1:5004/update_position/" + front_end_json["portfolio_id"]
@@ -93,6 +99,32 @@ def buy():
             position_update_validation = invoke_http(url, method='PUT', json = update_position_json)
 
             return position_update_validation
+
+            #adding record to orders table
+            if(position_update_validation["code"] == 201):
+
+                time_placed = datetime.datetime.now()
+                
+                order = Orders(front_end_json['portfolio_id'], "buy", front_end_json['ticker'], front_end_json['price'], front_end_json['quantity'], time_placed)
+
+                try:
+                    db.session.add(order)
+                    db.session.commit()
+                except:
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "message": "An error occurred recording the order."
+                        }
+                    ), 500
+
+            else:
+                return jsonify(
+                        {
+                            "code": 500,
+                            "message": "An error occurred recording the order."
+                        }
+                ), 500
 
             #update portfolio timing
 
@@ -107,31 +139,7 @@ def buy():
     else:
         return "Invalid Portfolio ID!"
 
-    # adding record to orders table **Insert once above is tested successfully
-    if(result == 200 or result == 201):
 
-        time_placed = datetime.datetime.now()
-        
-        order = Orders(portfolio_id, "buy", ticker, price, quantity, time_placed)
-
-        try:
-            db.session.add(order)
-            db.session.commit()
-        except:
-            return jsonify(
-                {
-                    "code": 500,
-                    "message": "An error occurred recording the order."
-                }
-            ), 500
-
-    else:
-        return jsonify(
-                {
-                    "code": 500,
-                    "message": "An error occurred recording the order."
-                }
-        ), 500
 
 
 @app.route("/place_order/sell", methods=['POST'])

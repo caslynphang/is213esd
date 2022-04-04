@@ -100,6 +100,10 @@ CREATE TABLE IF NOT EXISTS positions.positions (
 
 -- --------------------------------------------------------
 
+--
+-- Database: `orders`
+--
+
 DROP DATABASE IF EXISTS orders;
 CREATE DATABASE orders;
 
