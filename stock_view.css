@@ -120,8 +120,8 @@ a:hover {
   z-index: 10;
 }
 
-.sell::before {
-  content: "S";
+.high::before {
+  content: "H";
   background-color: #54626e;
   color: white;
   border-radius: 0.5rem 0 0 0.5rem;
@@ -131,7 +131,7 @@ a:hover {
   float: left;
 }
 
-.sell {
+.high {
   padding: 0.7rem 0.7rem 0.7rem 0;
   background-color: #e7e5ed;
   border-radius: 0.5rem;
@@ -139,8 +139,8 @@ a:hover {
   height: 100%;
 }
 
-.buy::before {
-  content: "B";
+.low::before {
+  content: "L";
   background-color: #54626e;
   color: white;
   border-radius: 0.5rem 0 0 0.5rem;
@@ -150,7 +150,7 @@ a:hover {
   float: left;
 }
 
-.buy {
+.low {
   padding: 0.7rem 0.7rem 0.7rem 0;
   background-color: #e7e5ed;
   border-radius: 0.5rem;
