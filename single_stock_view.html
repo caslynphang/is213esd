@@ -127,7 +127,7 @@
                 <p class="m-0">Portfolio</p>
               </a>
 
-              <a href="#" class="col services rounded text-center mx-2 py-3">
+              <a href="stock_recommender_view.html" class="col services rounded text-center mx-2 py-3">
                 <img src="images/thumbs_up.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
@@ -163,20 +163,20 @@
                 class="d-flex justify-content-between bg-white p-5 soft-shadow details-banner"
               >
                 <div>
-                  <p class="text-muted">Pre-market</p>
-                  <h1 class="fw-bold">123</h1>
+                  <p class="text-muted">Average price</p>
+                  <h1 class="fw-bold" id="average">123</h1>
                 </div>
 
                 <div>
-                  <p class="text-muted">Previous close</p>
-                  <h1 class="fw-bold">123</h1>
-                  <p class="text-muted">June 16, 4.00pm</p>
+                  <p class="text-muted">Close Price</p>
+                  <h1 class="fw-bold" id="close">123</h1>
+                  <!-- <p class="text-muted">June 16, 4.00pm</p> -->
                 </div>
 
                 <div>
-                  <p class="text-muted">Open</p>
-                  <h1 class="fw-bold">123</h1>
-                  <p class="text-muted">June 16, 4.00pm</p>
+                  <p class="text-muted">Open Price</p>
+                  <h1 class="fw-bold" id="open">123</h1>
+                  <!-- <p class="text-muted">June 16, 4.00pm</p> -->
                 </div>
               </div>
             </div>
@@ -186,41 +186,44 @@
                 <p class="mb-3">Details</p>
                 <!-- loop stock info here  -->
                 <div class="d-flex justify-content-between">
-                  <p class="text-muted">Day's Range</p>
-                  <p>123</p>
+                  <p class="text-muted">Highest</p>
+                  <p id="highest">123</p>
                 </div>
 
                 <div class="d-flex justify-content-between">
-                  <p class="text-muted">Day's Range</p>
-                  <p>123</p>
+                  <p class="text-muted">Lowest</p>
+                  <p id="lowest">123</p>
                 </div>
 
                 <div class="d-flex justify-content-between">
-                  <p class="text-muted">Day's Range</p>
-                  <p>123</p>
+                  <p class="text-muted">Number</p>
+                  <p id="number">123</p>
                 </div>
 
                 <div class="d-flex justify-content-between">
-                  <p class="text-muted">Day's Range</p>
-                  <p>123</p>
+                  <p class="text-muted">Volume</p>
+                  <p id="volume">123</p>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                  <p class="text-muted">Day's Range</p>
-                  <p>123</p>
-                </div>
               </div>
 
               <div class="floating-banner bg-white soft-shadow p-5">
                 <div class="d-flex justify-content-around">
                   <!-- Buying -->
                   <div class="d-flex flex-column align-items-center">
-                    <p class="fw-bold text-muted">Buying</p>
-                    <h2 class="fw-bold">123</h2>
+                    <p class="fw-bold text-muted">Price</p>
+                    <h2 class="fw-bold" id="price">123</h2>
                     <!-- Button trigger modal -->
+                    
+                  </div>
+
+                  <!-- Selling -->
+                  <div class="d-flex flex-column align-items-center">
+                    <!-- <p class="fw-bold text-muted">Selling</p> -->
+                    <!-- <h2 class="fw-bold">123</h2> -->
                     <button
                       type="button"
-                      class="btn btn-purple"
+                      class="btn btn-purple mb-3"
                       data-bs-toggle="modal"
                       data-bs-target="#buyModal"
                     >
@@ -266,12 +269,6 @@
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- Selling -->
-                  <div class="d-flex flex-column align-items-center">
-                    <p class="fw-bold text-muted">Selling</p>
-                    <h2 class="fw-bold">123</h2>
                     <!-- Button trigger modal -->
                     <button
                       type="button"
@@ -337,11 +334,10 @@
   let searchParams = new URLSearchParams(window.location.search);
   if (searchParams.has('ticker')){
     var ticker = searchParams.get('ticker')
-    var ticker = "AAPL";
     // console.log(ticker);
 
     // call stockinfo.py to retrieve individual stock details
-    const url = "http://127.0.0.1:5000/stock_info/get_all_stock_info/" + ticker;
+    const url = "http://127.0.0.1:5005/stock_info/get_indiv_info/" + ticker;
 
     axios
       .get(url)
@@ -349,38 +345,30 @@
         // process response.dataobject
         // console.log(typeof(response.data))
         console.log(response.data);
-        // var result = response.data;
 
-        // this.email_error = "";
-        // this.password_error = "";
+        var result = response.data[0]
 
-        // // if no error, then no error msg
-        // var email_error = result.email;
-        // var password_error = result.password;
-        // // console.log(email_error,password_error)
+        var close = result.c
+        var open = result.o
+        var average = result.vw
+        
+        var highest = result.h
+        var lowest = result.l
+        var number = result.n
+        var volume = result.v
 
-        // // if got error, then set error msg in data variable
-        // if (result.email != undefined) {
-        //   this.email_error = email_error;
-        // }
-        // if (this.email == "") {
-        //   this.email_error = "Please enter your email.";
-        // }
-        // if (result.password != undefined) {
-        //   this.password_error = password_error;
-        // }
+        // console.log(average)
+        $("#average").text(average);
+        $("#close").text(close);
+        $("#open").text(open);
 
-        // // if no error, redirect to homepage
-        // if (result == "") {
-        //   $(".scrolling").append(
-        //     "<p class='succeed-text'>Account successfully created. Redirecting you to the Homepage... </p>"
-        //   );
-        //   $(".scrolling").scrollTop($(".scrolling")[0].scrollHeight);
+        $("#highest").text(highest);
+        $("#lowest").text(lowest);
+        $("#number").text(number);
+        $("#volume").text(volume);
 
-        //   setTimeout(function () {
-        //     window.location.replace("stock_view.html");
-        //   }, 5000);
-        // }
+        $("#price").text(close);
+
       })
       .catch((error) => {
         // process error object
@@ -388,4 +376,5 @@
       });
   } 
 
+  
 </script>
