@@ -400,7 +400,7 @@
     // console.log("dasa");
     // console.log(ticker_name);
 
-    var quantity = $("#buy_amount").val();
+    var quantity = parseInt($("#buy_amount").val());
     var email = document.cookie
       .split("; ")
       .filter(function (c) {
@@ -431,8 +431,11 @@
             console.log(portfolio_id);
 
             // if no error,
-            var price = $("#close").text();
+            var price = parseFloat($("#close").text());
+            portfolio_id = portfolio_id.replace(/-/g, '').toString();
+
             console.log(ticker, price, quantity, portfolio_id);
+
             const url = "http://127.0.0.1:5001/place_order/buy";
             axios
               .post(url, {
@@ -442,10 +445,17 @@
                   quantity: quantity,
                   order_type: "buy",
                   portfolio_id: portfolio_id,
+                  // ticker: 'TSLA',
+                  // price: 800.5,
+                  // quantity: 1,
+                  // order_type: "buy",
+                  // portfolio_id: '023aed7f67134fc5ae59a5b7208ad450',
                 },
               })
               .then((response) => {
                 // process response.dataobject
+                console.log(response.data);
+
                 var buy_result = response.data;
                 console.log(buy_result);
               })
