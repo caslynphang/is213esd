@@ -145,7 +145,8 @@
           <div class="container outer p-5">
             <div class="text-white fw-bold bg-black">
               <div class="d-flex">
-                <p id="ticker_first_letter"
+                <p
+                  id="ticker_first_letter"
                   class="stock-picture mb-0 d-flex justify-content-center align-items-center"
                 >
                   A
@@ -377,7 +378,7 @@
         // console.log(average)
         $("#ticker_name").text(ticker);
         $("#ticker_first_letter").text(ticker.charAt(0));
-        
+
         $("#average").text(average);
         $("#close").text(close);
         $("#open").text(open);
@@ -396,7 +397,7 @@
   }
 
   $("#buy-btn").click(function () {
-    console.log("dasa");
+    // console.log("dasa");
     // console.log(ticker_name);
 
     var quantity = $("#buy_amount").val();
@@ -414,71 +415,53 @@
       .get(getuser_url)
       .then((response) => {
         // process response.dataobject
-        // console.log(typeof(response.data))
         var result = response.data;
         console.log(result);
         var user_id = result.data.user_id;
         console.log(result.data.user_id);
 
-        const getportfolio_url = "http://127.0.0.1:5003/get_portfolio/user_find/" + user_id;
+        const getportfolio_url =
+          "http://127.0.0.1:5003/get_portfolio/user_find/" + user_id;
 
         axios
           .get(getportfolio_url)
           .then((response) => {
             // process response.dataobject
-            var portfolio = response.data;
-            console.log(portfolio);
+            var portfolio_id = response.data.data.portfolio_id;
+            console.log(portfolio_id);
 
-            // if no error, redirect to homepage
-            
+            // if no error,
+            var price = $("#close").text();
+            console.log(ticker, price, quantity, portfolio_id);
+            const url = "http://127.0.0.1:5001/place_order/buy";
+            axios
+              .post(url, {
+                params: {
+                  ticker: ticker,
+                  price: price,
+                  quantity: quantity,
+                  order_type: "buy",
+                  portfolio_id: portfolio_id,
+                },
+              })
+              .then((response) => {
+                // process response.dataobject
+                var buy_result = response.data;
+                console.log(buy_result);
+              })
+              .catch((error) => {
+                // process error object
+                console.log("error");
+              });
           })
           .catch((error) => {
             // process error object
-            // error_code = error.response.status;
           });
-
-        // if no error, redirect to homepage
-        // if (result == "201") {
-        //   // ssuccess
-        // }
       })
       .catch((error) => {
         // process error object
-        // error_code = error.response.status;
-
-        // if error
-        // if (error_code == "500") {
-        //   console.log('error500')
-        // }
-
-        // // if user account already created error
-        // if (error_code == "400") {
-        //   console.log('error400')
-        //   $(".scrolling").append(
-        //     "<p class='error-text'>Account already exists!</p>"
-        //   );
-        //   $(".scrolling").scrollTop($(".scrolling")[0].scrollHeight);
-        // }
       });
 
-    const url = "http://127.0.0.1:5001/buy";
-    axios
-      .post(url, {
-        params: {
-          ticker: ticker,
-          price: close,
-          quantity: 5,
-          order_type: "buy",
-          portfolio_id: 1,
-        },
-      })
-      .then((response) => {
-        // process response.dataobject
-        var result = response.data;
-      })
-      .catch((error) => {
-        // process error object
-        console.log("error");
-      });
+    // console.log(portfolio_id);
   });
 </script>

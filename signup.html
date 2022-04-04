@@ -131,17 +131,18 @@
               // console.log(result.data.user_id);
 
               // if no error, redirect to homepage
-              if (result == "201") {
-                // ssuccess
-              }
+              // if (result == "201") {
+              //   // ssuccess
+              // }
             })
             .catch((error) => {
               // process error object
               // error_code = error.response.status;
             });
 
+          // console.log("help");
           document.cookie = "email=" + email;
-          // console.log(document.cookie);
+          console.log(document.cookie);
 
           $(".scrolling").append(
             "<p class='succeed-text'>Account successfully created. Redirecting you to the Homepage... </p>"
