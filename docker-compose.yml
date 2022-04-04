@@ -30,7 +30,7 @@ services:
     image: jordanteoh2020/stock_recommender:esd
     restart: always
     environment:
-      URL: http://127.0.0.1:5000/stockinfo/get_all_stock_info/
+      URL: http://127.0.0.1:5005/stockinfo/get_all_stock_info/
       PYTHONUNBUFFERED: 1
 
   ##################################
