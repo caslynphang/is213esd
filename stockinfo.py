@@ -53,7 +53,7 @@ def get_all_stock_info():
 @app.route("/stock_info/get_indiv_info/<string:stockName>")
 def get_indiv_info(stockName):
 # get info for one stock
-    r = requests.get('https://api.polygon.io/v3/reference/tickers/'+stockName+'?apiKey=svwrq5Gs8XJYQos1HqSs0T3ilmE1KAOx')
+    r = requests.get('https://api.polygon.io/v2/aggs/ticker/'+stockName+'/range/1/day/2021-07-22/2021-07-22?adjusted=true&sort=asc&limit=120&apiKey=svwrq5Gs8XJYQos1HqSs0T3ilmE1KAOx')
     results = r.json()['results']
     return jsonify(results)
 
