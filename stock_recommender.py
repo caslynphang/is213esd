@@ -14,7 +14,7 @@ rangelist = []
 @app.route("/stock_recommender/recommend_by_closeprice/<string:portfolio_id>")
 def recommend_by_closeprice(portfolio):
     # talk to portfolio.py
-    url = ""
+    url = "http://127.0.0.1:5000/get_portfolio/<string:portfolio_id>"
     portfolio = invoke_http(url, method='GET', json=None, **kwargs)
 
     # retrieve last updated position for portfolio
@@ -29,7 +29,7 @@ def recommend_by_closeprice(portfolio):
     stockName = max(date_ticker, key=date_ticker.get)
 
     # talk to stockinfo.py
-    url = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/<string:stockName>"
+    url = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/"
     results = invoke_http(url, method='GET', json=None, **kwargs)
     
     # find close price of stock chosen by user
@@ -44,7 +44,7 @@ def recommend_by_closeprice(portfolio):
     for result in results:
         if result['c'] <upper_limit and result['c'] > lower_limit and result['T'] != stockName:
             rangelist.append({"Ticker" : str(result['T']), "Close Price" : str(result['c'])})
-        return jsonify(
+    return jsonify(
                 {
             "code": 200,
             "data": rangelist
@@ -56,7 +56,7 @@ def recommend_by_closeprice(portfolio):
 def recommend_by_tradevolume():
     final_result = {}
     # talk to stockinfo.py
-    url = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/<string:stockName>"
+    url = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/"
     results = invoke_http(url, method='GET', json=None, **kwargs)
     trade_volume_list = []
 
