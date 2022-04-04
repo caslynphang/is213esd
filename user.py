@@ -10,7 +10,7 @@ import uuid
 import os,sys
 
 import logging
-
+ 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
@@ -21,6 +21,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications requi
 db = SQLAlchemy(app) #initialization of connection, stored in variable db
 login = LoginManager() #init of flask-login manager
 login.init_app(app)
+login.login_view = 'login'
 CORS(app)
 
 class Users(db.Model, UserMixin):
@@ -279,6 +280,20 @@ def login():
                     "message": "Error"
                 }
                 ), 400 #redirect to home view
+    except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        ex_str = str(exc_obj) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+        print(ex_str)
+        return jsonify(
+        {
+            "code": 500,
+            "data": {
+                "email": email
+            },
+            "message": "Error in logging in"
+        }
+        ), 500 
 
 
 
@@ -296,8 +311,7 @@ def signup():
             return jsonify(
                 {
                     "code": 201,
-                    "data":"Success",
-                    "user": signup_results
+                    "data":"Success"
                 }
             ), 201
     
