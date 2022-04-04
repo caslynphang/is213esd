@@ -258,15 +258,27 @@ def login():
             email = data['email']
             password = data['password']
             user = Users.query.filter_by(email = email).first()#get user object based off email since email is unique
-            if user is not None and user.check_password(password): #if user is found and password is verified. check_password method from user obj, will compared pw
+            if user is not None and user.check_password(password): #if user is found and password is verified. check_password method
                 login_user(user) #login user with login_user 
-                return "Success" #redirect to home view
-    except:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        ex_str = str(exc_obj) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
-        print(ex_str)
-        return ""
+                return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "email": email
+                    },
+                    "message": "Success"
+                }
+                ), 200 #redirect to home view
+            else:
+                return jsonify(
+                {
+                    "code": 400,
+                    "data": {
+                        "email": email
+                    },
+                    "message": "Error"
+                }
+                ), 400 #redirect to home view
 
 
 
