@@ -400,6 +400,8 @@
   $("#buy-btn").click(function () {
     // console.log("dasa");
     // console.log(ticker_name);
+    $("#buy_body > p").text('');
+
 
     var quantity = parseInt($("#buy_amount").val());
     var email = document.cookie
@@ -483,6 +485,7 @@
   $("#sell-btn").click(function () {
     // console.log("dasa");
     // console.log(ticker_name);
+    $("#sell_body > p").text('');
 
     var quantity = parseInt($("#sell_amount").val());
     var email = document.cookie
