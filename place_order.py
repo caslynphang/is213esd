@@ -169,7 +169,7 @@ def sell():
     
     #2. extracting data from json request
     front_end_json = request.get_json()
-    front_end_json = front_end_json['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
+    # front_end_json = front_end_json['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
 
     #3 check if portfolio is valid
     url = "http://127.0.0.1:5003/get_portfolio/" + front_end_json["portfolio_id"]
