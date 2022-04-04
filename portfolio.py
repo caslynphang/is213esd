@@ -2,7 +2,6 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from GUID import GUID
-from user import Users
 import logging
 import uuid
 import os,sys
