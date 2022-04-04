@@ -85,20 +85,29 @@
 </html>
 
 <script>
+  $('#login').click(function (){
   var email = $("#email").val();
   var password = $("#password").val();
-
-  const url = '/get_user/<string:email>';
-  axios.get(url)
-  .then(function (response) {
-    // handle success
-    console.log(response);
+  const url = 'http://127.0.0.1:5002/login';
+  console.log(email,password);
+  axios.post(url, {
+    email: email,
+    password: password
   })
-  .catch(function (error) {
-    // handle error
+  .then(response => {
+    if(response.data.code == 200){
+      document.cookie = "email" + email;
+      setTimeout(function () {
+            window.location.replace("stock_view.html");
+          }, 5000);
+        }
+    }
+  )
+  .catch(error => {
+    $(".scrolling").append(
+            "<p class='succeed-text'>Please check your credentials again. </p>"
+          );
     console.log(error);
-  })
-  .then(function () {
-    // always executed
   });
+})
 </script>
