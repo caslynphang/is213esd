@@ -169,12 +169,14 @@
     },
     mounted: function () {
       // console.log('loaded');
-      const url = 'http://127.0.0.1:5000/stock_info/get_all_stock_info/'
+      const url = 'http://127.0.0.1:5006/stock_recommender/recommend_by_tradevolume'
       axios.get(url)
         .then(response => {
           // process response.dataobject
           // console.log(typeof(response.data))
           var result = response.data
+
+          // for ()
 
           // this.ticker = ''
           // this.stock_name = ''
