@@ -70,7 +70,7 @@ p {
     font-size: 0.6rem;
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
     border: 1px #C7CAFF solid;
     border-radius: 5rem;
     padding: 0.7em 1.2em;
@@ -79,11 +79,11 @@ input[type=text] {
     margin-top: 0.3rem;
 }
 
-input[type=text]:hover {
+input[type=text]:hover, input[type=password]:hover {
     border: 1px #9499f5 solid;
 }
 
-input[type=text]:focus {
+input[type=text]:focus, input[type=password]:hover {
     border: 1px #9499f5 solid;
     background-color: rgb(255, 251, 246);
     outline: none;
@@ -119,4 +119,8 @@ a:hover {
 
 .succeed-text {
     color: #5DB16E;
+}
+
+.error-text {
+    color: #B15D5D;
 }

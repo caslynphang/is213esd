@@ -35,12 +35,13 @@ def buy(stockName):
 
 
 
-@app.route("/stock_info/get_all_stock_info/")
+@app.route("/stock_info/get_all_stock_info")
 def get_all_stock_info():
 # get yesterday's/today's close prices for all stocks (USE YOUR OWN KEYS LOL[i only hv 5 req/min] -- polygon.io)
     r = requests.get('https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/'+mostrecentday+'?adjusted=true&apiKey=JVUOJpz7eTK1LXR6J0bZxnQVnyifIbvt')
     results = r.json()['results']
-    return results
+    return jsonify(results)
+    
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
