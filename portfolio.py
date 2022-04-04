@@ -1,70 +1,34 @@
 from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from GUID import GUID
+from user import Users
 import logging
-from sqlalchemy.types import TypeDecorator, CHAR
-from sqlalchemy.dialects.postgresql import UUID
 import uuid
+import os,sys
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/esdproject' #dynamically retrieves db url
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/portfolios' #dynamically retrieves db url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications require extra memory and is not necessary in this case
  
 db = SQLAlchemy(app) #initialization of connection, stored in variable db
 
-
-class GUID(TypeDecorator): #for generation of uuid
-    """Platform-independent GUID type.
-
-    Uses PostgreSQL's UUID type, otherwise uses
-    CHAR(32), storing as stringified hex values.
-
-    """
-    impl = CHAR
-    cache_ok = True
-
-    def load_dialect_impl(self, dialect):
-        if dialect.name == 'postgresql':
-            return dialect.type_descriptor(UUID())
-        else:
-            return dialect.type_descriptor(CHAR(32))
-
-    def process_bind_param(self, value, dialect):
-        if value is None:
-            return value
-        elif dialect.name == 'postgresql':
-            return str(value)
-        else:
-            if not isinstance(value, uuid.UUID):
-                return "%.32x" % uuid.UUID(value).int
-            else:
-                # hexstring
-                return "%.32x" % value.int
-
-    def process_result_value(self, value, dialect):
-        if value is None:
-            return value
-        else:
-            if not isinstance(value, uuid.UUID):
-                value = uuid.UUID(value)
-            return value
 
 
 class Portfolios(db.Model):
     __tablename__ = 'portfolios'
 
 
-    portfolio_id = db.Column(GUID(), primary_key = True, default=uuid.uuid4()) #char(32) in mysql
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    portfolio_id = db.Column(GUID(), primary_key = True, default = uuid.uuid4 , nullable = False) #char(32) in mysql
+    user_id = db.Column(GUID(), nullable = False)
     time_created = db.Column(db.DateTime(), nullable=False)
     last_updated = db.Column(db.DateTime(), nullable = False)
-    positions = db.relationship('Positions', backref = 'portfolio', cascade = 'all, delete') #for use in sqlalchemy
+    
  
-    def __init__(self, portfolio_id, user_id, time_created, last_updated): #constructor. initializes record
-        self.portfolio_id = portfolio_id
+    def __init__(self, user_id, time_created, last_updated): #constructor. initializes record
         self.user_id = user_id
         self.time_created = time_created
         self.last_updated = last_updated
@@ -134,6 +98,10 @@ def create_portfolio(user_id): #create portfolio
         ), 201
 
     except:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        ex_str = str(exc_obj) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+        print(ex_str)
         return jsonify(
             {
                 "code": 500,
@@ -222,6 +190,6 @@ def delete_portfolio(portfolio_id):
 
 
 if __name__ == "__main__":
-    app.run(port = 5000, debug = True) #adding host = 0.0.0.0 ensures that the service can be accessible in the network debug = true restarts the flask app if the source code is being changed as the flask app is running
+    app.run(port = 5003, debug = True) #adding host = 0.0.0.0 ensures that the service can be accessible in the network debug = true restarts the flask app if the source code is being changed as the flask app is running
 
 #can specify which ip address and port that the flask app should start with, can communicate with other computers in this manner

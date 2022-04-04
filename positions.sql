@@ -18,24 +18,11 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `esdproject`
+-- Database: `positions`
 --
 
--- --------------------------------------------------------
-
---
--- Table structure for table `portfolios`
---
-
-DROP TABLE IF EXISTS `portfolios`;
-CREATE TABLE IF NOT EXISTS `portfolios` (
-  `portfolio_id` char(32) NOT NULL,
-  `user_id` char(32) NOT NULL,
-  `time_created` datetime NOT NULL,
-  `last_updated` datetime NOT NULL,
-  PRIMARY KEY (`portfolio_id`),
-  KEY `fk_user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP DATABASE IF EXISTS positions
+CREATE DATABASE positions
 
 -- --------------------------------------------------------
 
@@ -60,39 +47,6 @@ CREATE TABLE IF NOT EXISTS `positions` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `user_id` char(32) NOT NULL,
-  `first_name` varchar(120) NOT NULL,
-  `last_name` varchar(120) NOT NULL,
-  `email` varchar(120) NOT NULL,
-  `password_hash` varchar(120) NOT NULL,
-  `time_created` datetime NOT NULL,
-  `last_updated` datetime NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `portfolios`
---
-ALTER TABLE `portfolios`
-  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
---
--- Constraints for table `positions`
---
-ALTER TABLE `positions`
-  ADD CONSTRAINT `fk_portfolio_id` FOREIGN KEY (`portfolio_id`) REFERENCES `portfolios` (`portfolio_id`) ON DELETE CASCADE;
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

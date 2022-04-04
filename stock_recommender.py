@@ -2,7 +2,6 @@ from flask import Flask, jsonify
 from datetime import date, timedelta, datetime
 import requests
 import json
-from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
@@ -14,8 +13,8 @@ rangelist = []
 @app.route("/stock_recommender/recommend_by_closeprice/<string:portfolio_id>")
 def recommend_by_closeprice(portfolio):
     # talk to portfolio.py
-    url = "http://127.0.0.1:5000/get_portfolio/<string:portfolio_id>"
-    portfolio = invoke_http(url, method='GET', json=None, **kwargs)
+    url1 = "http://127.0.0.1:5000/get_portfolio/<string:portfolio_id>"
+    portfolio = invoke_http(url1, method='GET', json=None, **kwargs)
 
     # retrieve last updated position for portfolio
     for objs in portfolio:
@@ -29,8 +28,8 @@ def recommend_by_closeprice(portfolio):
     stockName = max(date_ticker, key=date_ticker.get)
 
     # talk to stockinfo.py
-    url = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/"
-    results = invoke_http(url, method='GET', json=None, **kwargs)
+    url2 = "http://127.0.0.1:5000/stockinfo/get_all_stock_info/"
+    results = invoke_http(url2, method='GET', json=None, **kwargs)
     
     # find close price of stock chosen by user
     for result in results:
@@ -79,27 +78,3 @@ def recommend_by_tradevolume():
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
-
-
-# just to test
-
-# recommend_by_closeprice([{"ticker":"NIO",
-# "total_bought_at":500,
-# "no_of_positions":5,
-# "last_updated": "2022-03-15",
-# "last_bought_at":20
-# },
-# {"ticker":"TSLA",
-# "total_bought_at":20,
-# "no_of_positions":51,
-# "last_updated": "2022-03-13",
-# "last_bought_at":673.12
-# },
-# {"ticker":"AAPL",
-# "total_bought_at":12,
-# "no_of_positions":6,
-# "last_updated": "2022-03-22",
-# "last_bought_at":200
-# }])
-
-
