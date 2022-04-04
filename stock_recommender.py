@@ -13,10 +13,14 @@ rangelist = []
 
 # recommmend by closeprice
 @app.route("/stock_recommender/recommend_by_closeprice/<string:portfolio_id>")
-def recommend_by_closeprice(portfolio):
+def recommend_by_closeprice(portfolio_id):
     # talk to portfolio.py
-    url1 = "http://127.0.0.1:5000/get_portfolio/<string:portfolio_id>"
+    url1 = "http://127.0.0.1:5004/get_positions"
+    url1 += "/" + portfolio_id
+
     portfolio = invoke_http(url1, method='GET', json=None)
+
+    portfolio = portfolio["data"]
 
     # retrieve last updated position for portfolio
     for objs in portfolio:
@@ -27,6 +31,7 @@ def recommend_by_closeprice(portfolio):
     
         ticker = objs['ticker']
         date_ticker[ticker] = objs['last_updated']
+    
     stockName = max(date_ticker, key=date_ticker.get)
 
     # talk to stockinfo.py
