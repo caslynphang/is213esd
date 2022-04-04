@@ -1,4 +1,4 @@
-# :wave: is213-project :wave:
+# :ok_hand: is213-project :ok_hand:
 
 # IS213 - Group 7 - TradingWheels :bike:
 
@@ -31,46 +31,39 @@ Trading Wheels is a paper trading microservice application that is used to educa
     <img src="images/logo.png">
 </div>
 
-## :ladder: Steps :ladder:
+## :question: How to Use Our Web Application (for Visitors to our Website)
 
-### :full_moon: Overall Scenario: :full_moon:
+### :full_moon: General Overall Scenario: :full_moon:
 
 1. Insert login.html into web root folder
 2. Run "docker-compose up" in the folder that holds the docker-compose.yml file
 3. Open up login.html in browser
 4. Key in details to login if user has an account, or click sign up to sign up for new account
-5. Once at home page, user can have a look at the recommended stocks or choose to search for a particular stock to buy or sell
+5. Once at home page, user will see the recommended stocks based on trade volume or they can choose to search for a particular stock to buy or sell
 
 ### :globe_with_meridians: Buy Stocks
-1. User can search for the particular stock to buy
-2. single_stock_view page will display the closing price of the day
-3. User can click on the buy button, where the quantity to purchase will pop up
-4. 
+6. User can search for the particular stock to buy
+7. single_stock_view page will display the closing price of the day
+8. User can click on the buy button, where the quantity to purchase will pop up
+9. After placing the buy order, the User's portfolio will be updated
+10. When the portfolio is successfully updated, notification of successful purchase will be sent
 
 ### :star: Sell Stocks
-*
+6. User can search for the particular stock to buy
+7. single_stock_view page will display the closing price of the day
+8. User can click on the sell button, where the quantity to sell will pop up
+9. After placing the sell order, the User's portfolio will be updated
+10. When the portfolio is successfully updated, notification of successful sale will be sent
 
 ### :dart: Stock Recommender
-*
-
-## :question: How to Use Our Web Application (for Visitors to our Website)
-
+6. User clicks on stocks recommended based on the last transacted stock price
+7. single_stock_view page will display recommended stock chosen
 
 ### :warning: Point to note
 
 The database is only found locally, thus importing the sql file would be required to load and store the data. Additional features such as a cloud database etc were not done due to time constraints. For testing purposes, you can access the website on localhost and follow the instructions below.
 
-
-1. Insert index.html and index.js into web root folder
-2. run stockinfo.py
-3. run place_order.py
-3. Open index.html in browser, 
-4. type in stock ticker, click submit
-5. Type in quantity of stock and click buy
-6. open console and you should see summary of order in JSON to be passed to portfolio microservic
-
 ## :notebook_with_decorative_cover: Others
-
 
 How to link - [Google Login](https://developers.google.com/identity/gsi/web)
 
