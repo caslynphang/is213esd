@@ -206,7 +206,7 @@ def update_position(portfolio_id):
         if (Positions.query.filter_by(portfolio_id = portfolio_id, ticker = ticker).first()): #position found
                 to_update = Positions.query.filter_by(portfolio_id = portfolio_id).first() #get position record via query and filter
 
-                to_update.total_quantity = 10
+                # to_update.total_quantity = 10
                 if data['last_bought_price']:
                     to_update.last_bought_price = data['last_bought_price']
                 if data['last_sold_price']:
@@ -226,7 +226,7 @@ def update_position(portfolio_id):
 
 
                 to_update.last_updated = datetime.now()
-
+                
                 db.session.commit()
 
                 return jsonify( #portfolio successfully updated

@@ -103,7 +103,7 @@ def buy():
             new_last_transaction_status = "buy"
             new_last_transaction_quantity = front_end_json["quantity"]
 
-            update_position_json = {"portfolio_id": position_json["portfolio_id"], "ticker": position_json["ticker"], "total_bought_at": new_total_bought_at, "total_quantity": new_total_quantity, "last_bought_price": new_last_bought_price, "last_sold_price": position_json["last_sold_price"], "last_updated_price": new_last_updated_price, "last_transaction_status": new_last_transaction_status, "last_transaction_quantity": new_last_transaction_quantity, "last_updated": position_json["last_updated"]}
+            update_position_json = {"portfolio_id": position_json["portfolio_id"], "ticker": position_json["ticker"], "total_bought_at": new_total_bought_at, "total_sold_at": position_json["total_sold_at"], "total_quantity": new_total_quantity, "last_bought_price": new_last_bought_price, "last_sold_price": position_json["last_sold_price"], "last_updated_price": new_last_updated_price, "last_transaction_status": new_last_transaction_status, "last_transaction_quantity": new_last_transaction_quantity, "last_updated": position_json["last_updated"]}
 
             #call update positions function to update position record in positions table
 
@@ -128,14 +128,6 @@ def buy():
                             "message": "An error occurred recording the order."
                         }
                     ), 500
-
-            else:
-                return jsonify(
-                        {
-                            "code": 500,
-                            "message": "An error occurred recording the order."
-                        }
-                ), 500
 
             #update portfolio timing
 
@@ -193,7 +185,7 @@ def sell():
                 new_last_transaction_status = "sell"
                 new_last_transaction_quantity = front_end_json["quantity"]
 
-                update_position_json = {"portfolio_id": position_json["portfolio_id"], "ticker": position_json["ticker"], "total_sold_at": new_total_sold_at, "total_quantity": new_total_quantity, "last_bought_price": position_json["last_bought_price"], "last_sold_price": new_last_sold_price, "last_updated_price": new_last_updated_price, "last_transaction_status": new_last_transaction_status, "last_transaction_quantity": new_last_transaction_quantity, "last_updated": position_json["last_updated"]}
+                update_position_json = {"portfolio_id": position_json["portfolio_id"], "ticker": position_json["ticker"], "total_bought_at": position_json["total_bought_at"], "total_sold_at": new_total_sold_at, "total_quantity": new_total_quantity, "last_bought_price": position_json["last_bought_price"], "last_sold_price": new_last_sold_price, "last_updated_price": new_last_updated_price, "last_transaction_status": new_last_transaction_status, "last_transaction_quantity": new_last_transaction_quantity, "last_updated": position_json["last_updated"]}
 
                 #call update positions function to update position record in positions table
 
@@ -201,7 +193,22 @@ def sell():
 
                 position_update_validation = invoke_http(url, method='PUT', json = update_position_json)
 
-                return position_update_validation
+                #adding record to orders table
+
+                time_placed = datetime.datetime.now()
+                
+                order = Orders(front_end_json['portfolio_id'], "sell", front_end_json['ticker'], front_end_json['price'], front_end_json['quantity'], time_placed)
+
+                try:
+                    db.session.add(order)
+                    db.session.commit()
+                except:
+                    return jsonify(
+                        {
+                            "code": 500,
+                            "message": "An error occurred recording the order."
+                        }
+                    ), 500
 
                 #update portfolio timing
 
@@ -209,7 +216,7 @@ def sell():
 
                 portfolio_update_validation = invoke_http(url, method='PUT')
 
-                return position_update_validation
+                return "Sell order Succesfully Filled!"
 
     else:
         return "Invalid Portfolio ID!"
