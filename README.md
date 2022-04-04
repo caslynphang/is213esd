@@ -1,47 +1,3 @@
-# is213esd TradingWheels Services
-
-Overall Scenario:
-
-1. Insert login.html into web root folder
-2. Run "docker-compose up" in the folder that holds the docker-compose.yml file
-3. Open up login.html in browser
-4. Key in details to login if user has an account, or click sign up to sign up for new account
-5. Once at home page, user can have a look at the recommended stocks or choose to search for a particular stock to buy or sell
-
-To run buy user scenario:
-1. User can search for the particular stock to buy
-2. single_stock_view page will display the closing price of the day
-3. User can click on the buy button, where the quantity to purchase will pop up
-4. 
-
-To run sell user scenario:
-
-
-
-
-To run stock recommender scenario:
-
-
-
-
-
-1. Insert index.html and index.js into web root folder
-2. run stockinfo.py
-3. run place_order.py
-3. Open index.html in browser, 
-4. type in stock ticker, click submit
-5. Type in quantity of stock and click buy
-6. open console and you should see summary of order in JSON to be passed to portfolio microservic
-7. e
-
-
-
-
-How to link - [Google Login](https://developers.google.com/identity/gsi/web)
-
-How to add image - ![Logo](images/logo.png)
-
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=453420&assignment_repo_type=GroupAssignmentRepo)
 # :wave: is213-project :wave:
 
 # IS213 - Group 7 - TradingWheels :bike:
@@ -75,8 +31,21 @@ Trading Wheels is a paper trading microservice application that is used to educa
     <img src="images/logo.png">
 </div>
 
+## :ladder: Steps :ladder:
+
+### :full_moon: Overall Scenario: :full_moon:
+
+1. Insert login.html into web root folder
+2. Run "docker-compose up" in the folder that holds the docker-compose.yml file
+3. Open up login.html in browser
+4. Key in details to login if user has an account, or click sign up to sign up for new account
+5. Once at home page, user can have a look at the recommended stocks or choose to search for a particular stock to buy or sell
+
 ### :globe_with_meridians: Buy Stocks
-* 
+1. User can search for the particular stock to buy
+2. single_stock_view page will display the closing price of the day
+3. User can click on the buy button, where the quantity to purchase will pop up
+4. 
 
 ### :star: Sell Stocks
 *
@@ -92,5 +61,18 @@ Trading Wheels is a paper trading microservice application that is used to educa
 The database is only found locally, thus importing the sql file would be required to load and store the data. Additional features such as a cloud database etc were not done due to time constraints. For testing purposes, you can access the website on localhost and follow the instructions below.
 
 
+1. Insert index.html and index.js into web root folder
+2. run stockinfo.py
+3. run place_order.py
+3. Open index.html in browser, 
+4. type in stock ticker, click submit
+5. Type in quantity of stock and click buy
+6. open console and you should see summary of order in JSON to be passed to portfolio microservic
+
 ## :notebook_with_decorative_cover: Others
+
+
+How to link - [Google Login](https://developers.google.com/identity/gsi/web)
+
+How to add image - ![Logo](images/logo.png)
 
