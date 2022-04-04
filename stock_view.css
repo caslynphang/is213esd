@@ -291,3 +291,6 @@ tr:hover {
 .succeed-text {
   color: #5DB16E;
 }
+.error-text {
+  color: #B15D5D;
+}
