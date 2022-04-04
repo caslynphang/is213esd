@@ -253,7 +253,7 @@
                               aria-label="Close"
                             ></button>
                           </div>
-                          <div class="modal-body">
+                          <div class="modal-body" id="buy_body">
                             <input
                               type="text"
                               class="filter-bar"
@@ -310,7 +310,7 @@
                               aria-label="Close"
                             ></button>
                           </div>
-                          <div class="modal-body">
+                          <div class="modal-body" id="sell_body">
                             <input
                               type="text"
                               class="filter-bar"
@@ -396,6 +396,7 @@
       });
   }
 
+  // user click on buy
   $("#buy-btn").click(function () {
     // console.log("dasa");
     // console.log(ticker_name);
@@ -432,7 +433,7 @@
 
             // if no error,
             var price = parseFloat($("#close").text());
-            portfolio_id = portfolio_id.replace(/-/g, '').toString();
+            portfolio_id = portfolio_id.replace(/-/g, "").toString();
 
             console.log(ticker, price, quantity, portfolio_id);
 
@@ -454,10 +455,96 @@
               })
               .then((response) => {
                 // process response.dataobject
-                console.log(response.data);
+                // console.log(response.data);
 
-                var buy_result = response.data;
+                var buy_result = response.data.message;
                 console.log(buy_result);
+                $("#buy_body").append(
+            "<p class='succeed-text'>"+buy_result+ "</p>"
+          );
+              })
+              .catch((error) => {
+                // process error object
+                console.log("error");
+              });
+          })
+          .catch((error) => {
+            // process error object
+          });
+      })
+      .catch((error) => {
+        // process error object
+      });
+
+    // console.log(portfolio_id);
+  });
+
+  // user click on sell
+  $("#sell-btn").click(function () {
+    // console.log("dasa");
+    // console.log(ticker_name);
+
+    var quantity = parseInt($("#sell_amount").val());
+    var email = document.cookie
+      .split("; ")
+      .filter(function (c) {
+        return /email=/.test(c);
+      })[0]
+      .replace(/email=/g, "");
+
+    const getuser_url = "http://127.0.0.1:5002/get_user/" + email;
+
+    // console.log(quantity,email);
+    axios
+      .get(getuser_url)
+      .then((response) => {
+        // process response.dataobject
+        var result = response.data;
+        console.log(result);
+        var user_id = result.data.user_id;
+        console.log(result.data.user_id);
+
+        const getportfolio_url =
+          "http://127.0.0.1:5003/get_portfolio/user_find/" + user_id;
+
+        axios
+          .get(getportfolio_url)
+          .then((response) => {
+            // process response.dataobject
+            var portfolio_id = response.data.data.portfolio_id;
+            console.log(portfolio_id);
+
+            // if no error,
+            var price = parseFloat($("#close").text());
+            portfolio_id = portfolio_id.replace(/-/g, "").toString();
+
+            console.log(ticker, price, quantity, portfolio_id);
+
+            const url = "http://127.0.0.1:5001/place_order/sell";
+            axios
+              .post(url, {
+                params: {
+                  ticker: ticker,
+                  price: price,
+                  quantity: quantity,
+                  order_type: "sell",
+                  portfolio_id: portfolio_id,
+                  // ticker: 'TSLA',
+                  // price: 800.5,
+                  // quantity: 1,
+                  // order_type: "buy",
+                  // portfolio_id: '023aed7f67134fc5ae59a5b7208ad450',
+                },
+              })
+              .then((response) => {
+                // process response.dataobject
+                // console.log(response.data);
+
+                var sell_result = response.data.message;
+                console.log(sell_result);
+                $("#sell_body").append(
+            "<p class='succeed-text'>"+sell_result+ "</p>"
+          );
               })
               .catch((error) => {
                 // process error object
