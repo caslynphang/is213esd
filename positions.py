@@ -71,7 +71,7 @@ class Positions(db.Model):
     last_updated = db.Column(db.DateTime(), nullable = False)
  
  
-    def __init__(self, portfolio_id, ticker, total_bought_at, total_quantity, last_bought_price, last_sold_price, last_updated_price, last_transaction_status, last_transaction_quantity,  last_updated): #constructor. initializes record
+    def __init__(self, portfolio_id, ticker, total_bought_at, total_quantity, last_bought_price, last_sold_price, last_updated_price, last_transaction_status, last_transaction_quantity,  last_updated, last_sold_at): #constructor. initializes record
         self.portfolio_id = portfolio_id
         self.ticker = ticker
         self.total_bought_at = total_bought_at
@@ -82,6 +82,7 @@ class Positions(db.Model):
         self.last_transaction_status = last_transaction_status
         self.last_transaction_quantity = last_transaction_quantity
         self.last_updated = last_updated
+        self.last_sold_at = last_sold_at
  
     def json(self): #returns json representation of the table in dict form
         return {"portfolio_id": self.portfolio_id, "ticker":self.ticker, "total_bought_at": self.total_bought_at, "quantity": self.total_quantity, "last_bought_price": self.last_bought_price, "last_sold_price": self.last_sold_price, "last_updated": self.last_updated} 
@@ -167,7 +168,7 @@ def add_position(portfolio_id): #add position
         ), 400
 
 
-        added_position = Positions(portfolio_id = portfolio_id, ticker = ticker, total_bought_at = quantity * buy_price, total_quantity = quantity, last_bought_price = buy_price, last_sold_price = 0.0, last_updated_price = buy_price, last_transaction_status = "buy", last_transaction_quantity = quantity, last_updated = datetime.now()) #create position record to be added to db
+        added_position = Positions(portfolio_id = portfolio_id, ticker = ticker, total_bought_at = quantity * buy_price, total_quantity = quantity, last_bought_price = buy_price, last_sold_price = 0.0, last_updated_price = buy_price, last_transaction_status = "buy", last_transaction_quantity = quantity, last_updated = datetime.now(), last_sold_at = 0.0) #create position record to be added to db
         db.session.add(added_position)
         #added_position.portfolio.last_updated = datetime.now()
         db.session.commit()
@@ -219,6 +220,8 @@ def update_position(portfolio_id):
                     to_update.total_bought_at = data['total_bought_at']
                 if data['total_quantity']:
                     to_update.total_quantity = data['total_quantity'] 
+                if data['last_sold_at']:
+                    to_update.last_sold_at = data['last_sold_at'] 
 
                 to_update.last_updated = datetime.now()
 
