@@ -1,4 +1,4 @@
-# :wave: is213-project :wave:
+# :ok_hand: is213-project :ok_hand:
 
 # IS213 - Group 7 - TradingWheels :bike:
 
@@ -33,7 +33,7 @@ Trading Wheels is a paper trading microservice application that is used to educa
 
 ## :ladder: Steps :ladder:
 
-### :full_moon: Overall Scenario: :full_moon:
+### :full_moon: General Overall Scenario: :full_moon:
 
 1. Insert login.html into web root folder
 2. Run "docker-compose up" in the folder that holds the docker-compose.yml file
@@ -42,16 +42,21 @@ Trading Wheels is a paper trading microservice application that is used to educa
 5. Once at home page, user can have a look at the recommended stocks or choose to search for a particular stock to buy or sell
 
 ### :globe_with_meridians: Buy Stocks
-1. User can search for the particular stock to buy
-2. single_stock_view page will display the closing price of the day
-3. User can click on the buy button, where the quantity to purchase will pop up
-4. 
+6. User can search for the particular stock to buy
+7. single_stock_view page will display the closing price of the day
+8. User can click on the buy button, where the quantity to purchase will pop up
+9. After placing the buy order, the User's portfolio will be updated
+10. When the portfolio is successfully updated, notification of successful purchase will be sent
 
 ### :star: Sell Stocks
-*
+6. User can search for the particular stock to buy
+7. single_stock_view page will display the closing price of the day
+8. User can click on the sell button, where the quantity to sell will pop up
+9. After placing the sell order, the User's portfolio will be updated
+10. When the portfolio is successfully updated, notification of successful sale will be sent
 
 ### :dart: Stock Recommender
-*
+6. 
 
 ## :question: How to Use Our Web Application (for Visitors to our Website)
 
