@@ -1,44 +1,77 @@
 from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.types import TypeDecorator, CHAR
+from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, LoginManager
-from GUID import GUID
-from flask_cors import CORS
+
 import uuid
-
-import os,sys
-
 import logging
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 app = Flask(__name__)
-CORS(app)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/users' #dynamically retrieves db url
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/esdproject' #dynamically retrieves db url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False #off as modifications require extra memory and is not necessary in this case
  
 db = SQLAlchemy(app) #initialization of connection, stored in variable db
 login = LoginManager() #init of flask-login manager
 
 
-class Users(db.Model, UserMixin):
+
+class GUID(TypeDecorator): #for generation of uuid
+    """Platform-independent GUID type.
+
+    Uses PostgreSQL's UUID type, otherwise uses
+    CHAR(32), storing as stringified hex values.
+
+    """
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            return dialect.type_descriptor(UUID())
+        else:
+            return dialect.type_descriptor(CHAR(32))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return str(value)
+        else:
+            if not isinstance(value, uuid.UUID):
+                return "%.32x" % uuid.UUID(value).int
+            else:
+                # hexstring
+                return "%.32x" % value.int
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        else:
+            if not isinstance(value, uuid.UUID):
+                value = uuid.UUID(value)
+            return value
+ 
+class Users(UserMixin, db.Model):
     __tablename__ = 'users'
 
 
-    user_id = db.Column(GUID(), primary_key = True, default=uuid.uuid4) #uuid, char(32) in mysql
+    user_id = db.Column(GUID(), primary_key = True, default=uuid.uuid4()) #uuid, char(32) in mysql
     first_name = db.Column(db.String(120), nullable = False)
     last_name = db.Column(db.String(120), nullable = False)
     email = db.Column(db.String(120), unique = True, nullable = False)
     password_hash = db.Column(db.String())    
     time_created = db.Column(db.DateTime(), nullable=False)
     last_updated = db.Column(db.DateTime(), nullable = False)
-
-
+    portfolios = db.relationship('Portfolio', backref = 'user', cascade = 'all, delete')
  
-    def __init__(self, first_name, last_name, email, time_created, last_updated): #constructor. initializes record
+    def __init__(self, user_id, first_name, last_name, email, time_created, last_updated): #constructor. initializes record
+        self.user_id = user_id
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
@@ -46,18 +79,18 @@ class Users(db.Model, UserMixin):
         self.last_updated = last_updated
     
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password) #inbuilt from werkzeug security
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.password_hash, password) #inbuilt from werkzeug security
+        return check_password_hash(self.password_hash, password)
  
     def json(self): #returns json representation of the table in dict form
         return {"user_id": self.user_id, "first_name": self.first_name, "last_name": self.last_name, "email": self.email, "time_created": self.time_created, "last_updated":self.last_updated} 
 
 
 @login.user_loader
-def load_user(user_id):
-    return Users.query.get(user_id) #usermixin will convert int user_id to str
+def load_user(id):
+    return Users.query.get(id)
 
 
 
@@ -99,18 +132,6 @@ def get_user_by_email(email):
         }
     ), 404
 
-@app.route("/for_login/<string:email>") #for login purposes, since it has to work with user object
-def for_login(email):
-    user = Users.query.filter_by(email=email).first() #returns a list of 1 item, .first() gets the first item. similar to limit 1 in sql
-    if user:
-        return user
-    return jsonify(
-        {
-            "code": 404,
-            "message": f"No user with {email} not found"
-        }
-    ), 404
-
 @app.route("/add_user", methods=['POST'])
 def add_user(): #create user
     data = request.get_json()
@@ -121,20 +142,10 @@ def add_user(): #create user
 
 
     try:
-        if Users.query.filter_by(email = email).first():
-            return jsonify(
-                {
-                    "code": 400,
-                    "data": {
-                        "email": "email"
-                    },
-                    "message": "User account already exists for this email. Please"
-                }
-            ), 400
+        user = Users(first_name = first_name, last_name = last_name, email = email, password = password, time_created = datetime.now(), last_updated = datetime.now()) #user_id auto generated
 
-        user = Users(first_name = first_name, last_name = last_name, email = email, time_created = datetime.now(), last_updated = datetime.now()) #user_id auto generated
-        user.set_password(password) #make use of hashing/salting funct via custom set_password funct defined in user class
-        db.session.add(user)         #add user to user table
+        db.session.add(user)
+        #add user to user table
         db.session.commit()
         return jsonify(
             {
@@ -144,12 +155,7 @@ def add_user(): #create user
         ), 201
 
     except:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        ex_str = str(exc_obj) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
-        print(ex_str)
-
-        return  jsonify(
+        return jsonify(
             {
                 "code": 500,
                 "data": {
@@ -157,7 +163,7 @@ def add_user(): #create user
                 },
                 "message": "An error occurred while creating this user account."
             }
-        ), 500 
+        ), 500
 
 
 @app.route("/update_user", methods = ['PUT'])
@@ -244,9 +250,8 @@ def delete_user(email):
                     },
                     "message": f"An error occured when trying to delete user {email}"
                 }
-            ), 500
+            )
+
 
 if __name__ == '__main__':
-    app.run(port=5002, debug=True)
-
-
+    app.run(port=5000, debug=True)

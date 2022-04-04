@@ -45,32 +45,31 @@ def buy():
     #2. extracting data from json request
     front_end_json = request.get_json()
     # front_end_json = front_end_json['params'] #to be passed as JSON to next microservice * KEYS: ticker | price | quantity | order_type | portfolio_id,
-    return front_end_json
 
     #3 check if portfolio is valid
-    url = "http://127.0.0.1:5000/get_portfolio/" + str(front_end_json["portfolio_id"])
+    url = "http://127.0.0.1:5003/get_portfolio/" + front_end_json["portfolio_id"]
 
     portfolio_validation = invoke_http(url, method='GET')
 
     if(portfolio_validation["code"] != 404): #portfolio valid!
 
         #4. invoke positions microservice to check if current portfolio already has position 
-        url = "http://127.0.0.1:5000/get_positions/" + front_end_json['portfolio_id'] + "/" + front_end_json["ticker"]
+        url = "http://127.0.0.1:5004/get_positions/" + front_end_json['portfolio_id'] + "/" + front_end_json["ticker"]
 
-        position_validation = invoke_http(url, method='GET', **kwargs)
+        position_validation = invoke_http(url, method='GET')
 
         if(position_validation["code"] == 404):
             #No initial positions: add quantity of new positions to positions table
 
-            url = "http://127.0.0.1:5000/add_position/" + str(front_end_json["portfolio_id"])
+            url = "http://127.0.0.1:5004/add_position/" + front_end_json["portfolio_id"]
             
-            add_position_validation = invoke_http(url, method='POST', json=front_end_json, **kwargs)
+            add_position_validation = invoke_http(url, method='POST', json=front_end_json)
 
             if(add_position_validation["code"] == 200):
-                return "Order Filled!"
+                return "Buy order Succesfully Filled!"
 
             else:
-                return "Something went wrong, please try again!"
+                return "An error occured! Please try again and contact the system administrator if it persists. Thank you:)"
             
         else:
             #portfolio already has some positions of requested ticker: update number of positions already in portfolio
@@ -78,24 +77,26 @@ def buy():
             #creating new json for updating quantity
             position_json = position_validation["data"]
 
-            new_total_bought_at = position_validation["total_bought_at"] + (front_end_json["price"] * front_end_json["quantity"])
-            new_total_quantity = position_validation["total_quantity"] + front_end_json["quantity"]
+            new_total_bought_at = position_json["total_bought_at"] + (front_end_json["price"] * front_end_json["quantity"])
+            new_total_quantity = position_json["quantity"] + front_end_json["quantity"]
             new_last_bought_price = front_end_json["price"]
             new_last_updated_price = front_end_json["price"]
             new_last_transaction_status = "buy"
             new_last_transaction_quantity = front_end_json["quantity"]
 
-            update_position_json = {portfolio_id: position_json["portfolio_id"], ticker: position_json["ticker"], total_bought_at: new_total_bought_at, total_quantity: new_total_quantity, last_bought_price: new_last_bought_price, last_sold_price: position_json["last_sold_price"], last_updated_price: new_last_updated_price, last_transaction_status: new_last_transaction_status, last_transaction_quantity: new_last_transaction_quantity, last_updated: position_json["last_updated"]}
+            update_position_json = {"portfolio_id": position_json["portfolio_id"], "ticker": position_json["ticker"], "total_bought_at": new_total_bought_at, "total_quantity": new_total_quantity, "last_bought_price": new_last_bought_price, "last_sold_price": position_json["last_sold_price"], "last_updated_price": new_last_updated_price, "last_transaction_status": new_last_transaction_status, "last_transaction_quantity": new_last_transaction_quantity, "last_updated": position_json["last_updated"]}
 
             #call update positions function to update position record in positions table
 
-            url = "http://127.0.0.1:5000/update_position/" + str(front_end_json["portfolio_id"])
+            url = "http://127.0.0.1:5004/update_position/" + front_end_json["portfolio_id"]
 
-            position_update_validation = invoke_http(url, method='PUT', json = update_position_json, **kwargs)
+            position_update_validation = invoke_http(url, method='PUT', json = update_position_json)
+
+            return position_update_validation
 
             #update portfolio timing
 
-            url = "http://127.0.0.1:5000/update_portfolio/" + str(front_end_json["portfolio_id"])
+            url = "http://127.0.0.1:5000/update_portfolio/" + front_end_json["portfolio_id"]
 
             portfolio_update_validation = invoke_http(url, method='PUT', **kwargs)
 
