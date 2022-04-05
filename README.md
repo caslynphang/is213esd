@@ -5,22 +5,23 @@
 ## Table of Contents
 * [Group Members](#family-group-members)
 * [Project Overview](#moneybag-project-overview-moneybag)
+* [How to Use (for Visitors)](#question-how-to-use-our-web-application-for-visitors-to-our-website)
+    * [Point to Note](#warning-point-to-note)
     * [Buy Stocks](#globe_with_meridians-buy-stocks)
     * [Sell Stocks](#star-sell-stocks)
     * [Stock Recommender](#dart-stock-recommender)
-* [How to Use (for Visitors)](#question-how-to-use-our-web-application-for-visitors-to-our-website)
-    * [Point to Note](#warning-point-to-note)
+
 * [Others](#notebook_with_decorative_cover-others)
 
 ## :family: Group Members
 
-| # | Name | SMU Email Address | Roles and Responsibilities |
-| ----------- | ----------- | ----------- | ----------- |
-| 1 | Caslyn Phang | caslynphang.2020@scis.smu.edu.sg | <ul><li></li></ul>|
-| 2 | Teh Xue Er | xueer.teh.2020@scis.smu.edu.sg | <ul><li></li></ul>|
-| 3 | Jethro Ong Yong En | jethro.ong.2020@scis.smu.edu.sg | <ul><li></li></ul>|
-| 4 | Goh Soon Hao | soonhao.goh.2020@scis.smu.edu.sg |<ul><li></li></ul>|
-| 5 | Teoh Chin Hao Jordan | jordan.teoh.2020@scis.smu.edu.sg | <ul><li></li></ul>|
+| # | Name | SMU Email Address |
+| ----------- | ----------- | ----------- |
+| 1 | Caslyn Phang | caslynphang.2020@scis.smu.edu.sg |
+| 2 | Teh Xue Er | xueer.teh.2020@scis.smu.edu.sg |
+| 3 | Jethro Ong Yong En | jethro.ong.2020@scis.smu.edu.sg |
+| 4 | Goh Soon Hao | soonhao.goh.2020@scis.smu.edu.sg |
+| 5 | Teoh Chin Hao Jordan | jordan.teoh.2020@scis.smu.edu.sg |
 
 ## :moneybag: Project Overview :moneybag:
 ### Background
@@ -32,6 +33,10 @@ Trading Wheels is a paper trading microservice application that is used to educa
 </div>
 
 ## :question: How to Use Our Web Application (for Visitors to our Website)
+
+### :warning: Point to note
+
+The database is only found locally, thus importing the sql file would be required to load and store the data. Additional features such as a cloud database etc were not done due to time constraints. For testing purposes, you can access the website on localhost and follow the instructions below.
 
 ### :full_moon: General Overall Scenario: :full_moon:
 
@@ -58,14 +63,3 @@ Trading Wheels is a paper trading microservice application that is used to educa
 ### :dart: Stock Recommender
 6. User clicks on stocks recommended based on the last transacted stock price
 7. single_stock_view page will display recommended stock chosen
-
-### :warning: Point to note
-
-The database is only found locally, thus importing the sql file would be required to load and store the data. Additional features such as a cloud database etc were not done due to time constraints. For testing purposes, you can access the website on localhost and follow the instructions below.
-
-## :notebook_with_decorative_cover: Others
-
-How to link - [Google Login](https://developers.google.com/identity/gsi/web)
-
-How to add image - ![Logo](images/logo.png)
-
