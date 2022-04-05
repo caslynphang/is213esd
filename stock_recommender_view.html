@@ -25,6 +25,12 @@
       crossorigin="anonymous"
     ></script>
 
+    <!-- JQuery CDN -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
     <!-- file CSS -->
     <link rel="stylesheet" href="stock_view.css" />
   </head>
@@ -112,13 +118,13 @@
                 <p class="m-0">Stock <br />Market</p>
               </a>
 
-              <a
+              <!-- <a
                 href="portfolio_view.html"
                 class="col services rounded text-center mx-2 py-3"
               >
                 <img src="images/portfolio.png" alt="" class="mb-2" />
                 <p class="m-0">Portfolio</p>
-              </a>
+              </a> -->
 
               <a
                 href="#"
@@ -127,6 +133,14 @@
                 <img src="images/thumbs_up.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
+            </div>
+
+            <div
+              id="logout"
+              alt=""
+              class="mb-2 bg-dark text-white rounded mt-4"
+            >
+              <p class="m-0 text-center">Log <br />Out</p>
             </div>
           </div>
         </div>
@@ -141,28 +155,23 @@
 
               <p class="mt-5">Last Transacted</p>
 
-
-
-
-
-            <table class="table table-borderless" >
-              <tr>
-                <td>
-                <div class="card mt-2">
-                  <div class="card-body">
-                    <h5 class="card-title">AAPL</h5>
-                    <p class="card-text">Close Price: 127.25</p>
-                    <a href="#" class="btn btn-primary mt-3">Buy</a>
-                  </div>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <div id="container">
-                
-              </div>
-            </tr>
-            </table>
+              <table class="table table-borderless">
+                <tr>
+                  <td>
+                    <div class="card mt-2">
+                      <div class="card-body">
+                        <h5 class="card-title">AAPL</h5>
+                        <p class="card-text">Close Price: 127.25</p>
+                        <a href="#" class="btn btn-primary mt-3">Buy</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <div id="container"></div>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -170,17 +179,19 @@
   </body>
 </html>
 
-
 <script>
-container= document.getElementById("container")
-axios.get("http://127.0.0.1:5005/stock_recommender/recommend_by_closeprice/<string:portfolio_id>")
-.then(response =>{
-  data = response.data
-  console.log(data)
-  data.foreach((result,idx) => {
-  const card = document.createElement('div');
-  card.classList = 'card-body';
-  const content = `
+  container = document.getElementById("container");
+  axios
+    .get(
+      "http://127.0.0.1:5005/stock_recommender/recommend_by_closeprice/<string:portfolio_id>"
+    )
+    .then((response) => {
+      data = response.data;
+      console.log(data);
+      data.foreach((result, idx) => {
+        const card = document.createElement("div");
+        card.classList = "card-body";
+        const content = `
               <tr>
                 <td>
                 <div class="card mt-5" style="width: 28rem;">
@@ -193,7 +204,25 @@ axios.get("http://127.0.0.1:5005/stock_recommender/recommend_by_closeprice/<stri
               </td>
             </tr>
   `;
-  container.innerHTML += content;
-})
-})
+        container.innerHTML += content;
+      });
+    });
+
+  $("#logout").click(function () {
+    console.log('click')
+    axios
+      .get("http://localhost:5002/logout")
+      .then(function (response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+        window.location.replace("login.html");
+      });
+  });
 </script>

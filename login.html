@@ -96,7 +96,7 @@
   })
   .then(response => {
     if(response.data.code == 200){
-      document.cookie = "email" + email;
+      document.cookie = "email=" + email;
       setTimeout(function () {
             window.location.replace("stock_view.html");
           }, 5000);

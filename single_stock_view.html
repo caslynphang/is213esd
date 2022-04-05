@@ -119,13 +119,13 @@
                 <p class="m-0">Stock <br />Market</p>
               </a>
 
-              <a
+              <!-- <a
                 href="portfolio_view.html"
                 class="col services rounded text-center mx-2 py-3"
               >
                 <img src="images/portfolio.png" alt="" class="mb-2" />
                 <p class="m-0">Portfolio</p>
-              </a>
+              </a> -->
 
               <a
                 href="stock_recommender_view.html"
@@ -134,6 +134,14 @@
                 <img src="images/thumbs_up.png" alt="" class="mb-2" />
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
+            </div>
+
+            <div
+              id="logout"
+              alt=""
+              class="mb-2 bg-dark text-white rounded mt-4"
+            >
+              <p class="m-0 text-center">Log <br />Out</p>
             </div>
           </div>
         </div>
@@ -400,8 +408,7 @@
   $("#buy-btn").click(function () {
     // console.log("dasa");
     // console.log(ticker_name);
-    $("#buy_body > p").text('');
-
+    $("#buy_body > p").text("");
 
     var quantity = parseInt($("#buy_amount").val());
     var email = document.cookie
@@ -462,8 +469,8 @@
                 var buy_result = response.data.message;
                 console.log(buy_result);
                 $("#buy_body").append(
-            "<p class='succeed-text'>"+buy_result+ "</p>"
-          );
+                  "<p class='succeed-text'>" + buy_result + "</p>"
+                );
               })
               .catch((error) => {
                 // process error object
@@ -485,7 +492,7 @@
   $("#sell-btn").click(function () {
     // console.log("dasa");
     // console.log(ticker_name);
-    $("#sell_body > p").text('');
+    $("#sell_body > p").text("");
 
     var quantity = parseInt($("#sell_amount").val());
     var email = document.cookie
@@ -546,15 +553,17 @@
                 var sell_result = response.data.message;
                 console.log(sell_result);
                 $("#sell_body").append(
-            "<p class='succeed-text'>"+sell_result+ "</p>"
-          );
+                  "<p class='succeed-text'>" + sell_result + "</p>"
+                );
               })
               .catch((error) => {
                 // process error object
                 console.log(error.response.data);
                 $("#sell_body").append(
-            "<p class='error-text'>"+error.response.data.message+ "</p>"
-          );
+                  "<p class='error-text'>" +
+                    error.response.data.message +
+                    "</p>"
+                );
               });
           })
           .catch((error) => {
@@ -566,5 +575,22 @@
       });
 
     // console.log(portfolio_id);
+  });
+
+  $("#logout").click(function () {
+    axios
+      .get("http://localhost:5002/logout")
+      .then(function (response) {
+        // handle success
+        console.log(response);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {
+        // always executed
+        window.location.replace("login.html");
+      });
   });
 </script>
