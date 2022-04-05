@@ -31,6 +31,9 @@
       crossorigin="anonymous"
     ></script>
 
+    <!-- Validation CDN-->
+    <script src = "https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+
     <!-- file CSS -->
     <link rel="stylesheet" href="login.css" />
   </head>
@@ -61,13 +64,16 @@
 
         <hr class="mb-4" />
 
-        <p class="login-label">Email</p>
-        <input type="text" id="email" />
-        <p class="login-label">Password</p>
-        <input type="password" id="password" />
+
+          <p class="login-label">Email</p>
+          <input type="email" id="email"/>
+          <p class="login-label">Password</p>
+          <input type="password" id="password"/>
+
+
 
         <div class="mt-3 mb-3">
-          <button id="login">Login</button>
+          <button id = 'login'>Login</button>
         </div>
 
         <p class="subtext">
@@ -75,16 +81,20 @@
         </p>
       </div>
     </div>
-    <iframe
+    <!-- <iframe
       src="https://app.vectary.com/p/1A4CxAD3B8qVcn5OKNqYT8"
       frameborder="0"
       width="100%"
       height="100%"
-    ></iframe>
+    ></iframe> -->
   </body>
 </html>
 
 <script>
+
+
+
+
   $('#login').click(function (){
   var email = $("#email").val();
   var password = $("#password").val();
@@ -96,7 +106,7 @@
   })
   .then(response => {
     if(response.data.code == 200){
-      document.cookie = "email=" + email;
+      document.cookie = "email" + email;
       setTimeout(function () {
             window.location.replace("stock_view.html");
           }, 5000);
@@ -110,4 +120,6 @@
     console.log(error);
   });
 })
+    
+  
 </script>
