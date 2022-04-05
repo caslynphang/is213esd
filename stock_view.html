@@ -138,6 +138,13 @@
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
             </div>
+            <div
+              id="logout"
+              alt=""
+              class="mb-2 bg-dark text-white rounded mt-4"
+            >
+              <p class="m-0 text-center">Log <br />Out</p>
+            </div>
           </div>
         </div>
 
@@ -155,7 +162,11 @@
               </tr>
 
               <!-- populate stock data -->
-              <tr class="selected_stock" v-for="(ticker, index) of tickers" @click="select_stock(ticker.T)">
+              <tr
+                class="selected_stock"
+                v-for="(ticker, index) of tickers"
+                @click="select_stock(ticker.T)"
+              >
                 <td>
                   <div class="d-flex">
                     <p
@@ -164,7 +175,7 @@
                       {{ticker.T.charAt(0)}}
                     </p>
                     <div class="ps-4">
-                      <p class="ticker" >{{ticker.T}}</p>
+                      <p class="ticker">{{ticker.T}}</p>
                       <!-- <p class="text-muted w-25">{{stock_name.at(index)}}</p> -->
                       <p class="text-muted"></p>
                     </div>
@@ -199,7 +210,7 @@
     methods: {
       select_stock(ticker_name) {
         // var ticker_name = $(".selected_stock").find(".ticker").text();
-        console.log('dasa');
+        console.log("dasa");
         console.log(ticker_name);
         window.location.href = "single_stock_view.html?ticker=" + ticker_name;
       },
@@ -253,4 +264,10 @@
   //   console.log(ticker_name);
   //   window.location.href = "single_stock_view.html?ticker=" + ticker;
   // });
+
+  $("#logout").click(function () {
+    axios.get("http://localhost:5002/logout").then((response) => {
+      window.location.replace("login.html");
+    });
+  });
 </script>

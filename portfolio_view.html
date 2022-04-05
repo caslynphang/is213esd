@@ -24,6 +24,12 @@
       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
       crossorigin="anonymous"
     ></script>
+    <!-- JQuery CDN -->
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
     <!-- Vue CDN -->
     <script src="https://unpkg.com/vue@3"></script>
     <!-- file CSS -->
@@ -129,6 +135,9 @@
                 <p class="m-0">Stock <br />Recommender</p>
               </a>
             </div>
+            <div id="logout"  alt="" class="mb-2 bg-dark text-white rounded mt-4">
+              <p class="m-0 text-center">Log <br />Out</p>
+              </div>
           </div>
         </div>
 
@@ -195,6 +204,8 @@
         total_bought_at: [],
         total_quantities: [],
         last_updated_prices: [],
+        total_portfolio: [],
+
       };
     },
     methods: {
@@ -240,7 +251,7 @@
           const url = "http://127.0.0.1:5004/get_positions/" + portfolio_id;
 
           axios
-            .post(url)
+            .get(url)
             .then((response) => {
               // process response.dataobject
               // console.log(typeof(response.data))
@@ -261,5 +272,10 @@
     },
   }).mount("#app");
 
-  
+  $("#logout").click(function(){
+    axios.get("http://localhost:5002/logout")
+    .then((response) => {
+      window.location.replace("login.html");
+    })
+  })
 </script>
