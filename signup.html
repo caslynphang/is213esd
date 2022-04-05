@@ -92,6 +92,7 @@
 <script>
   $("#sign-up").click(function () {
     // alert("Handler for .click() called.");
+    $(".error-text").text("");
 
     const url = "http://127.0.0.1:5002/signup";
 
@@ -156,7 +157,7 @@
       })
       .catch((error) => {
         // process error object
-        // error_code = error.response.status;
+        error_code = error.response.status;
         console.log("error");
         // console.log(error_code);
 
