@@ -86,6 +86,8 @@
 
 <script>
   $('#login').click(function (){
+    $(".error-text").text("");
+
   var email = $("#email").val();
   var password = $("#password").val();
   const url = 'http://127.0.0.1:5002/login';
@@ -97,15 +99,13 @@
   .then(response => {
     if(response.data.code == 200){
       document.cookie = "email=" + email;
-      setTimeout(function () {
             window.location.replace("stock_view.html");
-          }, 5000);
         }
     }
   )
   .catch(error => {
     $(".scrolling").append(
-            "<p class='succeed-text'>Please check your credentials again. </p>"
+            "<p class='error-text'>Please check your credentials again. </p>"
           );
     console.log(error);
   });
