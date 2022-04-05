@@ -41,7 +41,7 @@ services:
     image: jordanteoh2020/stockinfo:esd
     restart: always
     environment:
-      polygon_URL: https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2022-03-25?adjusted=true&apiKey=
+      polygon_URL: https://api.polygon.io/v2/aggs/grouped/locale/us/market/stocks/2022-04-04?adjusted=true&apiKey=JVUOJpz7eTK1LXR6J0bZxnQVnyifIbvt
       PYTHONUNBUFFERED: 1
 
   ###############################################
