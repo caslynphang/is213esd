@@ -13,11 +13,9 @@ services:
       context: ./
       dockerfile: user.Dockerfile
     image: jordanteoh2020/user:esd
-    depends_on: # (Need to edit)
-      - signup_login
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
+      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject/users
       PYTHONUNBUFFERED: 1
 
   ###################################
@@ -80,7 +78,7 @@ services:
       - user
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject
+      dbURL: mysql+mysqlconnector://root@localhost:3306/esdproject/positions
       PYTHONUNBUFFERED: 1
 
   #######################################################
@@ -95,7 +93,7 @@ services:
     depends_on: # (Need to edit)
       - user
     environment:
-      dbURL: mysql+mysqlconnector://root@host.docker.internal:3306/esdproject/portfolio
+      dbURL: mysql+mysqlconnector://root@host.docker.internal:3306/esdproject/portfolios
       PYTHONUNBUFFERED: 1
 
   ####################################
