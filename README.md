@@ -68,4 +68,4 @@ The database is only found locally, thus importing the sql file would be require
 ## :book: Others
 
 ### :key: Polygon API
-Due to the nature of the key constantly changing dates, we have hard coded the date in as our environment URL for docker-compose. However, in the files that use the API Key, they will automatically retrieve the data based on the function we created
+Due to the nature of the key constantly changing dates, we have hard coded the date in as our environment URL for docker-compose. However, in the files that use the API Key, they will automatically retrieve the data based on the function we created, and the date will not be fixed
