@@ -155,21 +155,19 @@
 
               <p class="mt-5">Last Transacted</p>
 
-              <table class="table table-borderless">
+              <table id = 'displaytable' class="table table-borderless">
                 <tr>
-                  <td>
+                    <div>
                     <div class="card mt-2">
                       <div class="card-body">
-                        <h5 class="card-title">AAPL</h5>
-                        <p class="card-text">Close Price: 127.25</p>
+                        <h5 class="card-title" style = "color:black" >AAPL</h5>
+                        <p class="card-text" style = "color:black">Close Price: 127.25</p>
                         <a href="#" class="btn btn-primary mt-3">Buy</a>
                       </div>
                     </div>
-                  </td>
+                    </div>
                 </tr>
-                <tr>
-                  <div id="container"></div>
-                </tr>
+                <div id="container"></div>
               </table>
             </div>
           </div>
@@ -181,32 +179,38 @@
 
 <script>
   container = document.getElementById("container");
+  portfolio_id = document.cookie.portfolio_id;
   axios
     .get(
-      "http://127.0.0.1:5005/stock_recommender/recommend_by_closeprice/<string:portfolio_id>"
+      "http://127.0.0.1:5006/stock_recommender/recommend_by_closeprice/c4f89261db284a6983917a45987932d8"
     )
     .then((response) => {
       data = response.data;
       console.log(data);
-      data.foreach((result, idx) => {
+      for(i = 0; i < data.data.length; i++){
         const card = document.createElement("div");
         card.classList = "card-body";
-        const content = `
-              <tr>
-                <td>
-                <div class="card mt-5" style="width: 28rem;">
-                  <div class="card-body">
-                    <h5 class="card-title">${result.ticker}</h5>
-                    <p class="card-text">Close Price:${result.price}</p>
-                    <a href="#" class="btn btn-primary">Buy</a>
-                  </div>
-                </div>
-              </td>
-            </tr>
-  `;
-        container.innerHTML += content;
-      });
+        toadd =
+        `
+                <tr>
+                  <td>
+                    <div class="card mt-2">
+                      <div class="card-body">
+                        <h5 class="card-title" style = "color:black">${data.data[i].Ticker}</h5>
+                        <p class="card-text" style = "color:black">Close Price: ${data.data[i]['Close Price']}</p>
+                        <a href="#" class="btn btn-primary mt-3">Buy</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+        `
+
+            container.innerHTML += toadd;
+      }
+
+
     });
+
 
   $("#logout").click(function () {
     console.log('click')
