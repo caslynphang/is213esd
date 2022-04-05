@@ -162,7 +162,7 @@
                       <div class="card-body">
                         <h5 class="card-title" style = "color:black" >AAPL</h5>
                         <p class="card-text" style = "color:black">Close Price: 127.25</p>
-                        <a href="#" class="btn btn-primary mt-3">Buy</a>
+                        <a href="single_stock_view.html?ticker=AAPL" class="btn btn-primary mt-3">Buy</a>
                       </div>
                     </div>
                     </div>
@@ -198,7 +198,7 @@
                       <div class="card-body">
                         <h5 class="card-title" style = "color:black">${data.data[i].Ticker}</h5>
                         <p class="card-text" style = "color:black">Close Price: ${data.data[i]['Close Price']}</p>
-                        <a href="#" class="btn btn-primary mt-3">Buy</a>
+                        <a href="single_stock_view.html?ticker=${data.data[i].Ticker}" class="btn btn-primary mt-3">Buy</a>
                       </div>
                     </div>
                   </td>
